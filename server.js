@@ -3,10 +3,14 @@ const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const exphbs = require("express-handlebars");
 const mysql = require("mysql");
-const router = require("./controllers/main_controller")
+const acctRouter = require("./controllers/main_controller")
+const apiRouter = require("./controllers/api_routes")
+const userRouter = require("./controllers/user_routes")
 const db = require("./models");
 const bcrypt = require("bcrypt");
 const moment = require('moment');
+const test = require("./db/databaseQuery")
+
 moment().format();
 
 const app = express();
@@ -26,15 +30,18 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 
-app.use("/", router)
+app.use("/", acctRouter);
+app.use("/api", apiRouter);
+app.use("/user", userRouter);
 
 db.sequelize.sync({force:true}).then(function() {
   app.listen(port, function() {
     console.log("App listening on PORT " + port);
-    //TESTING ONL//
-    db.User.create({
-      name:"test",
-      pw_hash: bcrypt.hashSync("test123", 10)
-    })
-  });
-});
+  })
+    //TESTING ONLY//
+   test.testUser();
+   test.testRecipe();
+   test.testStared(); 
+
+})
+

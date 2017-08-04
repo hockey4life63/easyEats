@@ -19,6 +19,7 @@
   "homepage": "https://github.com/hockey4life63/burger#readme",
   "dependencies": {
     "bcrypt": "^1.0.2",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "express-handlebars": "^3.0.0",
