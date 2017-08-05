@@ -55,7 +55,7 @@ acctManager.createAcct = (userInfo, callback)=>{
       callback({
         msg:"system error",
         success: false
-      })
+      }, true)
     })//db.user.findOne.then
   })
 }
@@ -99,7 +99,7 @@ acctManager.checkUuid = (userInfo, res, callback)=>{
           uuid:newUuid,
           name:userInfo.name
         }, secret.secret);
-        callback(newUuid)
+        callback(token)
       })
     }else{
       //if incorrect or older than 24 hours return to login screen
@@ -107,7 +107,8 @@ acctManager.checkUuid = (userInfo, res, callback)=>{
     }
   })
 }
-acctManager.comparePassword = (req, res, userDbInfo)=>{
+
+acctManager.comparePassword = (req, callback, userDbInfo)=>{
   bcrypt.compare(req.body.password, userDbInfo.pw_hash, (err, matched)=>{
       //if matches update with new uuid
       let newUuid = uuidv4();
@@ -135,14 +136,14 @@ acctManager.comparePassword = (req, res, userDbInfo)=>{
             uuid:newUuid,
             name:userDbInfo.name,
           }
-           res.json(resObj)
+           callback(resObj)
         }).catch((err)=>{
           console.log(err)
           resObj={
             msg:"login failed",
             success:false
           }
-           res.json(resObj)
+           callback(resObj)
         })
       } else{
         //if failed send response
@@ -150,10 +151,21 @@ acctManager.comparePassword = (req, res, userDbInfo)=>{
             msg:"login failed",
             success:false,
           }
-           res.json(resObj)
+           callback(resObj)
       }//else
      
     })//compare
+}
+
+acctManager.checkToken = (token, callback)=>{
+  let decodedToken = jwt.verify(token, secret.secret);
+  try {
+    let decodedToken = jwt.verify(token, secret.secret);
+  } catch(err) {
+    // statements
+    callback(err, true)
+  }
+  callback(decodedToken)
 }
 
 module.exports = acctManager;
