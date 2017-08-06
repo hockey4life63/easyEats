@@ -1,8 +1,9 @@
 const db = require("../models");
 const bcrypt = require("bcrypt");
+const checkToken = require("../password_auth/acctManager").checkToken;
 //const Promise = require("bluebird");
 
-const buildCommentTree = (commentArray, callback)=>{
+const _buildCommentTree = (commentArray, callback)=>{
     let returnArray = [];
     //loop thru all comments
     for (let element in commentArray){
@@ -21,6 +22,7 @@ const buildCommentTree = (commentArray, callback)=>{
     }
     callback(returnArray)
 }
+
 const findRecipeId = (recipeObj, callback)=>{
     db.Recipe.findOrCreate({
         where:{
@@ -36,28 +38,49 @@ const findRecipeId = (recipeObj, callback)=>{
     })
 }
 
-const addStar = (starObj, callback)=>{
-    db.Stared.create(starObj).then(results=>{
-        callback(results)
-    }).catch((err)=>{
-        callback(err, true)
+const addStar = (starObj,token, callback)=>{
+    checkToken(token, (results, err)=>{
+        if(err){
+            callback(err, true)
+        } else{
+            db.Stared.create(starObj).then(results=>{
+                callback(results)
+            }).catch((error)=>{
+                callback(error, true)
+            })
+        }
     })
+    
 }
 
-const addRecipe = (recipeObj, callback)=>{
-    db.Recipe.create(recipeObj).then((results)=>{
-        callback(results);
-    }).catch((err)=>{
-        callback(err, true)
+const addRecipe = (recipeObj, token,  callback)=>{
+    checkToken(token, (results, err)=>{
+        if(err){
+            callback(err, true)
+        } else{
+            db.Recipe.create(recipeObj).then((results)=>{
+                callback(results);
+            }).catch((err)=>{
+                callback(err, true)
+            })
+        }
     })
+    
 }
 
-const addComment = (commentObj, callback)=>{
-    db.Comment.create(commentObj).then((results)=>{
-        callback(results)
-    }).catch((err)=>{
-        callback(err, true)
+const addComment = (commentObj, token,  callback)=>{
+    checkToken(token, (results, err)=>{
+        if(err){
+            callback(err, true)
+        } else{
+            db.Comment.create(commentObj).then((results)=>{
+                callback(results)
+            }).catch((err)=>{
+                callback(err, true)
+            })
+        }
     })
+    
 }
 
 const getAllComments = (recipe_id, callback)=>{
@@ -67,8 +90,8 @@ const getAllComments = (recipe_id, callback)=>{
         },
         order:[["createdAt","DESC"]]
     }).then(comments=>{
-        buildCommentTree(comments, (results)=>{
-            callback(results)
+        _buildCommentTree(comments, (results)=>{
+        callback(results)
         })
     }).catch((err)=>{
         callback(err, true)
@@ -108,29 +131,46 @@ const findRecipeStarCount = (RecipeId, callback)=> {
     })
 }
 
-const findUserStaredRecipes = (UserId, callback)=> {
-    //find id of all recipeds stared by user
-    db.Stared.findAll({
+// const findUserStaredRecipes = (UserId, callback)=> {
+//     //find id of all recipeds stared by user
+//     db.Stared.findAll({
+//         where:{
+//             UserId
+//         }
+//     }).then((results)=>{
+//         let retArr = []
+//         let count = 0;
+//         //create array of promises
+//         results.forEach( (element, index)=>{
+//             retArr.push(db.Recipe.findById(element.RecipeId))
+//         });
+//         //wait for all to resolve
+//         Promise.all(retArr).then((results)=>{
+//             //pull out just curent data
+//             results = results.map((element)=>{
+//                 return element.dataValues
+//             })
+//             //use callback with results
+//             callback(results)
+//         })
+
+//     }).catch((err)=>{
+//         callback(err, true)
+//     })
+// }
+
+
+const findUserStaredRecipes = (UserId, callback)=>{
+   db.Stared.findAll({
         where:{
             UserId
+        },
+        include:{
+            model:db.Recipe
         }
     }).then((results)=>{
-        let retArr = []
-        let count = 0;
-        //create array of promises
-        results.forEach( (element, index)=>{
-            retArr.push(db.Recipe.findById(element.RecipeId))
-        });
-        //wait for all to resolve
-        Promise.all(retArr).then((results)=>{
-            //pull out just curent data
-            results = results.map((element)=>{
-                return element.dataValues
-            })
-            //use callback with results
-            callback(results)
-        })
-
+        results = results.map(element=>element.Recipe)
+        callback(results)
     }).catch((err)=>{
         callback(err, true)
     })
