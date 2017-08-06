@@ -3,26 +3,39 @@ var request = require("request");
 //====RecipePuppy.com====//
 var rpBaseURL = "http://www.recipepuppy.com/api/?";
 var rpORM = {
+
+	// dish needs to be formatted as an array
 	searchByDish: function(dish, cb) {
-		request(rpBaseURL + "q=" + dish, function(error, response, body) {
-			for(var i = 0; i < JSON.parse(body).results.length; i++) {
-				cb(JSON.parse(body).results[i].title);
-				cb(JSON.parse(body).results[i].href);
-				cb(JSON.parse(body).results[i].ingredients);
-				cb(JSON.parse(body).results[i].thumbnail);
-			}
+		var finalURL = rpBaseURL + "q=" + dish.join("+");
+		request(finalURL, function(error, response, body) {
+				cb(JSON.parse(body).results);
 		});
 	},
+
+	// ingredients need to be formatted as an arrays]
 	searchByIngredients: function(ingredients, cb) {
-		request(rpBaseURL + "i=" + ingredients.toString(), function(error,response, body) {
-			cb(JSON.parse(body));
+		var formattedIngredients = [];
+		for (i = 0; i < ingredients.length; i++) {
+			formattedIngredients.push(ingredients[i].split(" ").join("+"));
+		}
+		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + dish.join("+");
+		request(finalURL, function(error,response, body) {
+			cb(JSON.parse(body).results);
 		});
 	},
-	searchByDishWithIngredients: function(dish, ingredients, cb) {
-		request(rpBaseURL + "i=" + ingredients.toString() + "&q=" + dish, function(error, response, body) {
-			cb(JSON.parse(body));
+	
+	// dish and ingredients need to be formatted as arrays
+	searchByDishAndIngredients: function(dish, ingredients, cb) {
+		var formattedIngredients = [];
+		for (i = 0; i < ingredients.length; i++) {
+			formattedIngredients.push(ingredients[i].split(" ").join("+"));
+		}
+		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + dish.join("+");
+		console.log(finalURL);
+		request(finalURL, function(error, response, body) {
+				cb(JSON.parse(body).results);
 		});
 	},
 };
 
-// rpORM.searchByDish("chicken", console.log);
+rpORM.searchByDishAndIngredients(["steak", "fajitas"], ["onion", "bell pepper"], console.log);
