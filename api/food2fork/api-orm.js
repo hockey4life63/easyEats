@@ -20,16 +20,16 @@ var f2fORM = {
 	},
 	highestRatedRecipes: function(cb) {
 		request(f2fBaseURL, function(error, response, body) {
-			cb(JSON.parse(body).recipes);
+			cb(f2fORM.convertBodyArray(JSON.parse(body).recipes));
 		});
 	},
 	userSearch: function(search, cb) {
 		request(f2fBaseURL + "&q=" + search, function(error, response, body) {
-				// cb(JSON.parse(body).recipes);
-				cb(f2fORM.convertBodyArray(JSON.parse(body).recipes));
+			cb(f2fORM.convertBodyArray(JSON.parse(body).recipes));
 		});
 	}
 };
 
-f2fORM.userSearch("chicken", console.log);
+// f2fORM.userSearch("chicken", console.log);
+f2fORM.highestRatedRecipes(console.log);
 
