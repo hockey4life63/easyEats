@@ -31,5 +31,6 @@ var f2fORM = {
 };
 
 // f2fORM.userSearch("chicken", console.log);
-f2fORM.highestRatedRecipes(console.log);
+// f2fORM.highestRatedRecipes(console.log);
 
+module.exports = f2fORM;

@@ -7,6 +7,7 @@ var rpORM = {
 	// dish needs to be formatted as an array
 	searchByDish: function(dish, cb) {
 		var finalURL = rpBaseURL + "q=" + dish.join("+");
+		console.log(finalURL);
 		request(finalURL, function(error, response, body) {
 				cb(JSON.parse(body).results);
 		});
@@ -18,7 +19,8 @@ var rpORM = {
 		for (i = 0; i < ingredients.length; i++) {
 			formattedIngredients.push(ingredients[i].split(" ").join("+"));
 		}
-		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + dish.join("+");
+		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString();
+		console.log(finalURL);
 		request(finalURL, function(error,response, body) {
 			cb(JSON.parse(body).results);
 		});
@@ -38,4 +40,8 @@ var rpORM = {
 	},
 };
 
-rpORM.searchByDishAndIngredients(["steak", "fajitas"], ["onion", "bell pepper"], console.log);
+// rpORM.searchByDishAndIngredients(["steak", "fajitas"], ["onion", "bell pepper"], console.log);
+// rpORM.searchByIngredients(["onion", "bell pepper"], console.log);
+// rpORM.searchByDish(["steak", "fajitas"], console.log);
+
+module.exports = rpORM;
