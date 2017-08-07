@@ -11,6 +11,7 @@ let router =express.Router();
 router.post("/signUp", (req, res)=>{
   //hash the password
   acctManager.createAcct(req.body, (results)=>{
+    console.log(results)
     res.json(results)
   })
 })
@@ -22,6 +23,7 @@ router.post("/signIn", (req, res)=>{
   }).then(results =>{
     //compare the given password to stored hash
     acctManager.comparePassword(req, (results)=>{
+        console.log(results)
         res.json(results)
     }, results.dataValues)
   }).catch((data)=>{
