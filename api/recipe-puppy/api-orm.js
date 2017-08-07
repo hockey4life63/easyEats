@@ -5,16 +5,16 @@ var rpBaseURL = "http://www.recipepuppy.com/api/?";
 var rpORM = {
 
 	// dish needs to be formatted as an array
-	searchByDish: function(dish, cb) {
+	searchByDish: function(dish, callback) {
 		var finalURL = rpBaseURL + "q=" + dish.join("+");
 		console.log(finalURL);
 		request(finalURL, function(error, response, body) {
-				cb(JSON.parse(body).results);
+				callback(JSON.parse(body).results);
 		});
 	},
 
 	// ingredients need to be formatted as an arrays]
-	searchByIngredients: function(ingredients, cb) {
+	searchByIngredients: function(ingredients, callback) {
 		var formattedIngredients = [];
 		for (i = 0; i < ingredients.length; i++) {
 			formattedIngredients.push(ingredients[i].split(" ").join("+"));
@@ -22,12 +22,12 @@ var rpORM = {
 		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString();
 		console.log(finalURL);
 		request(finalURL, function(error,response, body) {
-			cb(JSON.parse(body).results);
+			callback(JSON.parse(body).results);
 		});
 	},
 	
 	// dish and ingredients need to be formatted as arrays
-	searchByDishAndIngredients: function(dish, ingredients, cb) {
+	searchByDishAndIngredients: function(dish, ingredients, callback) {
 		var formattedIngredients = [];
 		for (i = 0; i < ingredients.length; i++) {
 			formattedIngredients.push(ingredients[i].split(" ").join("+"));
@@ -35,7 +35,7 @@ var rpORM = {
 		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + dish.join("+");
 		console.log(finalURL);
 		request(finalURL, function(error, response, body) {
-				cb(JSON.parse(body).results);
+				callback(JSON.parse(body).results);
 		});
 	},
 };

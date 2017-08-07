@@ -18,19 +18,22 @@ var f2fORM = {
 		};
 		return newRecipeObject;
 	},
-	highestRatedRecipes: function(cb) {
+	highestRatedRecipes: function(callback) {
 		request(f2fBaseURL, function(error, response, body) {
-			cb(f2fORM.convertBodyArray(JSON.parse(body).recipes));
+			callback(f2fORM.convertBodyArray(JSON.parse(body).recipes));
 		});
 	},
-	userSearch: function(search, cb) {
-		request(f2fBaseURL + "&q=" + search, function(error, response, body) {
-			cb(f2fORM.convertBodyArray(JSON.parse(body).recipes));
+	// search needs to be formatted as an array
+	userSearch: function(search, callback) {
+		var finalURL = f2fBaseURL + "&q=" + search.join("+");
+		console.log(finalURL);
+		request(finalURL, function(error, response, body) {
+			callback(f2fORM.convertBodyArray(JSON.parse(body).recipes));
 		});
 	}
 };
 
-// f2fORM.userSearch("chicken", console.log);
+// f2fORM.userSearch(["chicken", "fajitas"], console.log);
 // f2fORM.highestRatedRecipes(console.log);
 
 module.exports = f2fORM;
