@@ -8,10 +8,11 @@ const acctManager = require("../password_auth/acctManager")
 let router =express.Router();
 
 router.post("/profile", (req, res)=>{
-    let userId = req.body.user_id
+    console.log("profile")
+    let userId = req.body.userId
     let renderObj ={};
-    dbOrm.findUserRecipe(userId, (results, err)=>{
-        renderObj.userRecipe = results;
+    dbOrm.findUserRecipe(userId, (recipes, err)=>{
+        renderObj.userRecipe = recipes;
         dbOrm.findUserStaredRecipes(userId, (results, err)=>{
             renderObj.staredRecipes = results;
             res.json(renderObj)
