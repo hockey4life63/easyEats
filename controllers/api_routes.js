@@ -2,8 +2,10 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const db = require("../models");
 const path = require("path");
-const dbOrm = require("../db/databaseQuery")
-const acctManager = require("../password_auth/acctManager")
+const dbOrm = require("../db/databaseQuery");
+const f2fOrm = require("../api/food2fork/api-orm");
+const rpOrm = require("../api/recipe-puppy/api-orm");
+const acctManager = require("../password_auth/acctManager");
 
 
 let router =express.Router();
@@ -75,7 +77,36 @@ router.post("/addComment", (req, res)=>{
                 }
             })
           })
+});
 
-})
+router.get("/topRecipes-f2f", (req, res)=>{
+    f2fOrm.highestRatedRecipes(function(results) {
+        res.json(results);
+    });
+});
+
+router.get("/searchRecipes-f2f", (req, res)=>{
+    f2fOrm.userSearch(req.body.search, (results)=>{
+        res.json(results);
+    });
+});
+
+router.get("/searchByDish-rp", (req, res)=>{
+    rpOrm.searchByDish(req.body.dish, (results)=>{
+        res.json(results);
+    });
+});
+
+router.get("/searchByIngredients-rp", (req, res)=>{
+    rpOrm.searchByIngredients(req.body.ingredients, (results)=>{
+        res.json(results);
+    });
+});
+
+router.get("/searchByDishAndIngredients-rp", (req, res)=>{
+    rpOrm.searchByDishAndIngredients(req.body.dish, req.body.ingredients, (results)=>{
+        res.json(results);
+    });
+});
 
 module.exports = router;
