@@ -2,8 +2,10 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const db = require("../models");
 const path = require("path");
-const dbOrm = require("../db/databaseQuery")
-const acctManager = require("../password_auth/acctManager")
+const dbOrm = require("../db/databaseQuery");
+const f2fOrm = require("../api/food2fork/api-Orm");
+const rpOrm = require("../api/recipe-puppy/api-Orm");
+const acctManager = require("../password_auth/acctManager");
 
 
 let router =express.Router();
@@ -75,7 +77,94 @@ router.post("/addComment", (req, res)=>{
                 }
             })
           })
+});
 
+// Get highest rated recipes from food2fork api
+router.get("/topRecipes", (req, res)=>{
+    f2fOrm.topRecipes((results)=>{
+        res.render(results);
+    });
+});
+
+// Get trending recipes from food2fork api
+router.get("/trendingRecipes", (req, res)=>{
+    f2f.Orm.trendingRecipes((results)=>{
+        res.render(results);
+    });
+});
+
+// Search by recipe from food2fork api & recipe puppy api
+router.get("/search/:recipe", (req, res)=>{
+    var recipeArr = req.params.recipe.split(",");
+    rpOrm.searchByRecipe(recipeArr, (results1)=>{
+        f2fOrm.userSearch(recipeArr, (results2)=>{
+            var combinedResults = [];
+            for (var i = 0; i < 6; i++) {
+                combinedResults.push(results1[i]);
+                combinedResults.push(results2[i]);
+            }
+            res.render(combinedResults);
+        });
+    });
+});
+
+// Search by ingredients from recipe puppy api
+router.get("/search/:ingredients", (req, res)=>{
+    rpOrm.searchByIngredients(req.params.ingredients, (results)=>{
+        res.render(results);
+    });
+});
+
+// Search by username from mysql database of user-submitted recipes
+router.get("/search/:username", (req, res)=>{
+    dbOrm.findUserRecipe(req.params.username, (results)=>{
+        res.render(results);
+    });
 })
+
+// Search by recipe and ingredients from recipe puppy api
+router.get("/search/:recipe/:ingredients", (req, res)=>{   
+    rpOrm.searchByRecipeAndIngredients(req.params.recipe, req.params.ingredients, (results)=>{
+        res.render(results);
+    });
+});
+
+// Search by recipe and username from mysql database
+router.get("/search/:recipe/:username", (req, res)=>{
+    // method for querying db by recipe
+});
+
+// Search by ingredients and username from mysql database
+router.get("/search/:ingredients/:username", (req, res)=>{
+    // method for querying db by ingredients
+});
+
+// Initial routing to occur when user has option to search by all 3 parameters
+router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
+    if (req.params.recipe === "null" && req.params.ingredients === "null" && req.params.username === "null") {
+        throw (err);
+    }
+    else if (req.params.recipe === "null" && req.params.ingredients === "null" && req.params.username !== "null") {
+        // redirect to searching only by username
+    }
+    else if (req.params.recipe === "null" && req.params.ingredients !== "null" && req.params.username === "null") {
+        // redirect to searching only by ingredients
+    }
+    else if (req.params.recipe !== "null" && req.params.ingredients === "null" && req.params.username === "null") {
+        // redirect to searching only by recipe
+    }
+    else if (req.params.recipe === "null" && req.params.ingredients !== "null" && req.params.username !== "null") {
+        // redirect to searching by username and ingredients
+    }
+    else if (req.params.recipe !== "null" && req.params.ingredients === "null" && req.params.username !== "null") {
+        // redirect to searching by username and recipe
+    }
+    else if (req.params.recipe !== "null" && req.params.ingredients !== "null" && req.params.username === "null") {
+        // redirect to searching by recipe and ingredients
+    }
+    else if (req.params.recipe !== "null" && req.params.ingredients !== "null" && req.params.username !== "null") {
+        // search by all parameters
+    }
+});
 
 module.exports = router;
