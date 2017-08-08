@@ -17,6 +17,7 @@ router.post("/addStar", (req, res)=>{
     let token = req.body.token;
     dbOrm.addStar(starData, token, (results, err)=>{
         if(err){ 
+            console.log(results)
             res.json({
                 err:results,
                 success:false

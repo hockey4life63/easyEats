@@ -1,0 +1,72 @@
+
+   <!--  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header"> -->
+       
+            <!-- Header -->
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+
+      <span class="mdl-layout-title">EasyEats</span>
+
+      <!-- Displayed on Computer and Tablet -->
+      <!-- Search -->
+      <div class="mdh-expandable-search mdl-cell--hide-phone">
+        <i class="material-icons">search</i>
+        <form action="#">
+          <input type="text" placeholder="Author Name" value ="authorName" size="1">
+        </form>
+      </div>
+      <div class="mdh-expandable-search mdl-cell--hide-phone">
+        <i class="material-icons">search</i>
+        <form action="#">
+          <input type="text" placeholder="Ingredient" value ="ingredient" size="1">
+        </form>
+      </div>
+      <div class="mdh-expandable-search mdl-cell--hide-phone">
+        <i class="material-icons">search</i>
+        <form action="#">
+          <input type="text" placeholder="Recipe Name" value="recipeName" size="1">
+        </form>
+      </div>
+
+      <!-- Displayed on mobile -->
+      <div class="mdl-layout-spacer mdl-cell--hide-tablet mdl-cell--hide-desktop"></div>
+      <!-- Search button -->
+      <button class="mdh-toggle-search mdl-button mdl-js-button mdl-button--icon mdl-cell--hide-tablet mdl-cell--hide-desktop">
+        <i class="material-icons">search</i>
+      </button>
+
+    </div>
+  </header>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid portfolio-max-width">
+            {{#each recipe}}
+                <div class="mdl-cell mdl-card mdl-shadow--4dp portfolio-card" data-link={{this.src_url}} id="recipe{{@index}}">
+                    <div class="mdl-card__media">
+                        <img class="article-image" src={{this.img_url}} border="0" alt="">
+                    </div>
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">{{this.name}}</h2>
+                    </div>
+                    {{!-- <div class="mdl-card__supporting-text">
+                        {{this.ingredients}}
+                    </div> --}}
+                    <div class="mdl-card__actions mdl-card--border">
+                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--accent" href="portfolio-example01.html">Read more</a>
+                    </div>
+                </div>
+            {{/each}}
+            </div>
+            <footer class="mdl-mini-footer">
+                <div class="mdl-mini-footer__left-section">
+                    <div class="mdl-logo">Recipe generator website</div>
+                </div>
+                <div class="mdl-mini-footer__right-section">
+                    <ul class="mdl-mini-footer__link-list">
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Privacy & Terms</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </main>
+    <!-- </div> -->
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>

@@ -7,9 +7,9 @@ const acctManager = require("../password_auth/acctManager")
 
 let router =express.Router();
 
-router.post("/profile", (req, res)=>{
+router.post("/profile/:id", (req, res)=>{
     console.log("profile")
-    let userId = req.body.userId
+    let userId = req.params.id
     let renderObj ={};
     dbOrm.findUserRecipe(userId, (recipes, err)=>{
         renderObj.userRecipe = recipes;

@@ -1,6 +1,6 @@
 const db = require("../models");
 const bcrypt = require("bcrypt");
-const checkToken = require("../password_auth/acctManager").checkToken;
+const checkToken = require("../password_auth/acctManager").checkUuid;
 //const Promise = require("bluebird");
 
 const _buildCommentTree = (commentArray, callback)=>{
@@ -41,7 +41,7 @@ const findRecipeId = (recipeObj, callback)=>{
 const addStar = (starObj,token, callback)=>{
     checkToken(token, (results, err)=>{
         if(err){
-            callback(err, true)
+            callback("invlaid token", true)
         } else{
             db.Stared.create(starObj).then(results=>{
                 callback(results)
@@ -56,7 +56,7 @@ const addStar = (starObj,token, callback)=>{
 const addRecipe = (recipeObj, token,  callback)=>{
     checkToken(token, (results, err)=>{
         if(err){
-            callback(err, true)
+            callback(results, true)
         } else{
             db.Recipe.create(recipeObj).then((results)=>{
                 callback(results);
@@ -71,7 +71,7 @@ const addRecipe = (recipeObj, token,  callback)=>{
 const addComment = (commentObj, token,  callback)=>{
     checkToken(token, (results, err)=>{
         if(err){
-            callback(err, true)
+            callback(results, true)
         } else{
             db.Comment.create(commentObj).then((results)=>{
                 callback(results)

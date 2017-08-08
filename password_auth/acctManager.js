@@ -101,8 +101,16 @@ acctManager.createNewUuid = (userInfo, callback)=>{
   })
 }
 
-acctManager.checkUuid = (userInfo, res, callback)=>{
- let decodedToken = jwt.verify(userInfo.token, secret.secret);
+acctManager.checkUuid = (userInfo, callback)=>{
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(userInfo.token, secret.secret);
+  } catch(err) {
+    // statements
+    callback(err, true)
+   return
+  }
+ 
   //gets user info
   db.User.findOne({
     where:{
@@ -117,22 +125,25 @@ acctManager.checkUuid = (userInfo, res, callback)=>{
       let token = jwt.sign({
           id:decodedToken.id,
           uuid:decodedToken.uuid,
-          name:userInfo.name
+          name:decodedToken.name
         }, secret.secret);
       callback(token)
     } else if(results.uuid === decodedToken.uuid && timeSinceUpdate<= 24*60*60){
       //if over 6 hours but within 24hours generate new key to use and callback with it
       acctManager.createNewUuid(results, (newUuid)=> {
         let token = jwt.sign({
-          id:userInfo.id,
+          id:decodedToken.id,
           uuid:newUuid,
-          name:userInfo.name
+          name:decodedToken.name
         }, secret.secret);
         callback(token)
       })
     }else{
       //if incorrect or older than 24 hours return to login screen
-      res.redirect("/login")
+      callback({
+        msg:"invalid token",
+        success:false
+      }, true)
     }
   })
 }
@@ -191,7 +202,6 @@ acctManager.checkToken = (token, callback)=>{
   try {
     let decodedToken = jwt.verify(token, secret.secret);
   } catch(err) {
-    // statements
     callback(err, true)
   }
   callback(decodedToken)

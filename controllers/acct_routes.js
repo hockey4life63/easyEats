@@ -8,7 +8,11 @@ const acctManager = require("../password_auth/acctManager")
 
 let router =express.Router();
 
-router.post("/signUp", (req, res)=>{
+router.get("/", (req, res)=>{
+    //render login page
+})
+
+router.post("/signup", (req, res)=>{
   //hash the password
   acctManager.createAcct(req.body, (results)=>{
     console.log(results)
@@ -16,7 +20,7 @@ router.post("/signUp", (req, res)=>{
   })
 })
 
-router.post("/signIn", (req, res)=>{
+router.post("/signin", (req, res)=>{
   //find user in db
   db.User.findOne({
     name:req.body.name
