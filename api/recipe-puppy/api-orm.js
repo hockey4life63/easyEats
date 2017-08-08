@@ -1,19 +1,19 @@
 var request = require("request");
 
-//====RecipePuppy.com====//
+//====RecipePuppy.com====//   (returns 10 recipes to a page)
 var rpBaseURL = "http://www.recipepuppy.com/api/?";
-var rpORM = {
+var rpOrm = {
 
-	// dish needs to be formatted as an array
-	searchByDish: function(dish, callback) {
-		var finalURL = rpBaseURL + "q=" + dish.join("+");
+	// recipe needs to be formatted as an array
+	searchByRecipe: function(recipe, callback) {
+		var finalURL = rpBaseURL + "q=" + recipe.join("+");
 		console.log(finalURL);
 		request(finalURL, function(error, response, body) {
 				callback(JSON.parse(body).results);
 		});
 	},
 
-	// ingredients need to be formatted as an arrays]
+	// ingredients need to be formatted as an array
 	searchByIngredients: function(ingredients, callback) {
 		var formattedIngredients = [];
 		for (i = 0; i < ingredients.length; i++) {
@@ -26,13 +26,13 @@ var rpORM = {
 		});
 	},
 	
-	// dish and ingredients need to be formatted as arrays
-	searchByDishAndIngredients: function(dish, ingredients, callback) {
+	// recipe and ingredients need to be formatted as arrays
+	searchByRecipeAndIngredients: function(recipe, ingredients, callback) {
 		var formattedIngredients = [];
 		for (i = 0; i < ingredients.length; i++) {
 			formattedIngredients.push(ingredients[i].split(" ").join("+"));
 		}
-		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + dish.join("+");
+		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + recipe.join("+");
 		console.log(finalURL);
 		request(finalURL, function(error, response, body) {
 				callback(JSON.parse(body).results);
@@ -40,8 +40,8 @@ var rpORM = {
 	},
 };
 
-// rpORM.searchByDishAndIngredients(["steak", "fajitas"], ["onion", "bell pepper"], console.log);
-// rpORM.searchByIngredients(["onion", "bell pepper"], console.log);
-// rpORM.searchByDish(["steak", "fajitas"], console.log);
+// rpOrm.searchByRecipeAndIngredients(["steak", "fajitas"], ["onion", "bell pepper"], console.log);
+// rpOrm.searchByIngredients(["onion", "bell pepper"], console.log);
+// rpOrm.searchByRecipe(["steak", "fajitas"], console.log);
 
-module.exports = rpORM;
+module.exports = rpOrm;
