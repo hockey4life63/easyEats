@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset = "UTF-8">
+    <title>Simple Material Design</title>
+
+    
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style type="text/css">
+      .title {
+        font-size: 20px;
+        color: #666;
+      }
+      .demo-layout-transparent {
+          background: url('https://static1.squarespace.com/static/563b4d74e4b0d8beddbfe949/563b4dd5e4b0d4f2c9bc2a64/563b5adee4b07b20460e0a18/1446730465786/?format=2500w') center / cover;
+      }
+      .demo-layout-transparent .mdl-layout__header,
+      .demo-layout-transparent .mdl-layout__drawer-button {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+        color: white;
+      }
+      .navbar a {
+        color: white !important;
+      }
+      .homepage-search {
+        /*margin: auto;*/
+        /*width: 350px;*/
+        border: 4px solid green;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 5px;
+      }
+
+    
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  </head>
+  
+  <body>
+    <!-- <h1 class = "title"> Basic Material Design</h1>
+
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent material-icons">
+        code
+    </button> -->
+    <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+        <header class="mdl-layout__header mdl-layout__header--transparent">
+          <div class="mdl-layout__header-row">
+              <!-- Title -->
+              <span class="mdl-layout-title">EasyEats</span>
+              <!-- Add spacer, to align navigation to the right -->
+              <div class="mdl-layout-spacer"></div>
+              <!-- Navigation -->
+              <nav class="navbar mdl-navigation">
+                <a class="mdl-navigation__link" href="">Homepage</a>
+                <a class="mdl-navigation__link" href="">Search by All</a>
+                <a class="mdl-navigation__link" href="">Search by Author Name</a>
+                <!-- <a class="mdl-navigation__link" href="">Link</a> -->
+              </nav>
+          </div>
+        </header>
+       
+      <main class="mdl-layout__content" style="display:flex;justify-content:center;align-items:center;">
+        
+      <form action="#">
+
+      <div class = "homepage-search" style="width:350px;"s>
+
+        <!-- class "mdl-textfield container" -->
+        <div class="test1 mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        
+        <!-- class "mdl-textfield__input" -->
+        <input class="mdl-textfield__input" type="text" id="recipe-name" />
+  
+          <!-- class "mdl-textfield__label" -->
+          <label class="mdl-textfield__label" for="demo-input">Please type the name of the ingredient...</label>
+  
+          </div>
+
+          <button class=" test2 mdl-button mdl-js-button mdl-button--icon" id ="recipe-name-button">
+            <i class="material-icons">search</i>
+          </button>
+      </div>
+
+      </form>
+      </main>
+  </div>
+  </body>
+</html>
