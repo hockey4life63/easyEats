@@ -15,11 +15,7 @@ var rpOrm = {
 
 	// ingredients need to be formatted as an array
 	searchByIngredients: function(ingredients, callback) {
-		var formattedIngredients = [];
-		for (i = 0; i < ingredients.length; i++) {
-			formattedIngredients.push(ingredients[i].split(" ").join("+"));
-		}
-		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString();
+		var finalURL = rpBaseURL + "i=" + ingredients.toString();
 		console.log(finalURL);
 		request(finalURL, function(error,response, body) {
 			callback(JSON.parse(body).results);
@@ -30,9 +26,9 @@ var rpOrm = {
 	searchByRecipeAndIngredients: function(recipe, ingredients, callback) {
 		var formattedIngredients = [];
 		for (i = 0; i < ingredients.length; i++) {
-			formattedIngredients.push(ingredients[i].split(" ").join("+"));
+			formattedIngredients.push(ingredients[i].replace(" ", "+"));
 		}
-		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + recipe.join("+");
+		var finalURL = rpBaseURL + "i=" + formattedIngredients.toString() + "&q=" + recipe.replace(" ", "+");
 		console.log(finalURL);
 		request(finalURL, function(error, response, body) {
 				callback(JSON.parse(body).results);
