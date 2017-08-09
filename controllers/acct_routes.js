@@ -8,48 +8,35 @@ const acctManager = require("../password_auth/acctManager")
 
 let router =express.Router();
 
-router.get("/", (req, res)=>{
-    //render login page
-})
+// router.get("/", (req, res)=>{
+//     //render login page
+// })
 
-router.post("/signup", (req, res)=>{
-  //hash the password
-  acctManager.createAcct(req.body, (results)=>{
-    console.log(results)
-    res.json(results)
-  })
-})
+router.post("/signup", (req, res) =>acctManager.createAcct(req.body, results => res.json(results)))
 
-router.post("/signin", (req, res)=>{
-  //find user in db
-  db.User.findOne({
-    name:req.body.name
-  }).then(results =>{
-    //compare the given password to stored hash
-    acctManager.comparePassword(req, (results)=>{
-        console.log(results)
-        res.json(results)
-    }, results.dataValues)
-  }).catch((data)=>{
-    res.json({
-      msg:"password does not match",
-      success: false
+router.post("/signin", (req, res) => {acctManager.comparePassword(req,results=>res.json(results))})
+
+router.post("/check", (req, res) => {
+    //body needs uuid and name
+    acctManager.checkUuid(req.body, response => {
+        if(response.success){
+            const resObj = {
+            name: req.body.name,
+            id: req.body.id,
+            token: response.token,
+            success: true,
+            msg: "Valid Session"
+            }
+            res.json(resObj)
+        } else{
+            res.json({
+                msg:"invalid token",
+                success:false
+            })
+        }
+        
     })
-  })
 })
 
-router.post("/check", (req, res)=>{
-  //body needs uuid and name
-  acctManager.checkUuid(req.body, res, (token)=>{
-      let resObj = {
-        name:req.body.name,
-        id: req.body.id,
-        token:token, 
-        success:true,
-        msg:"Vaild Session"
-      }
-      res.json(resObj)
-  } )
-})
 
 module.exports = router;

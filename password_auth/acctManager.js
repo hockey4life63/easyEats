@@ -1,7 +1,6 @@
 const db = require("../models");
 const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
-const path = require("path");
 const moment = require('moment');
 const jwt = require("jsonwebtoken");
 const secret = require("../config/secret");
@@ -10,7 +9,7 @@ const secret = require("../config/secret");
 //           expiresInMinutes: 1440 // expires in 24 hours
 //         })
 
-const  acctManager = {};
+const acctManager = {};
 
 const _checkUsernameAndPassword=(name, password)=>{
     let userErrors = [];
@@ -33,6 +32,7 @@ const _checkUsernameAndPassword=(name, password)=>{
   }
 
 acctManager.createAcct = (userInfo, callback)=>{
+  console.log(userInfo)
   let errors = _checkUsernameAndPassword(userInfo.name, userInfo.password)
   if(errors.success){
     bcrypt.hash(userInfo.password, 10, function(err, hash) {
@@ -87,18 +87,16 @@ acctManager.createAcct = (userInfo, callback)=>{
     })
   }
 }
-acctManager.createNewUuid = (userInfo, callback)=>{
-  //create a new uuid ad assigns it
-  let newUuid = uuidv4();
-  db.User.update({
-    uuid: newUuid
-  },{
-    where:{
-      id: userInfo.id
-    }
-  }).then(()=>{
-    callback(newUuid)
-  })
+acctManager.createNewUuid = (userInfo, callback) => {
+    //create a new uuid and assigns it
+    const newUuid = uuidv4();
+    db.User.update({
+        uuid: newUuid
+    }, {
+        where: {
+            id: userInfo.id
+        }
+    }).then(() => callback(newUuid))
 }
 
 acctManager.checkUuid = (userInfo, callback)=>{
@@ -117,18 +115,27 @@ acctManager.checkUuid = (userInfo, callback)=>{
       id:decodedToken.id
     }
   }).then(results=>{
-   
+
     //records time since last update
     let timeSinceUpdate = moment().diff(moment(userInfo.updatedAt), "seconds")
-    if(results.uuid === decodedToken.uuid && timeSinceUpdate <=6*60*60){
+    if(results===null){
+        callback({
+        msg:"invalid token",
+        success:false
+      })
+    } else if(results.uuid === decodedToken.uuid /*&& timeSinceUpdate <=6*60*60*/){
       //if within last 6 hours callback with same uuid
       let token = jwt.sign({
           id:decodedToken.id,
           uuid:decodedToken.uuid,
           name:decodedToken.name
         }, secret.secret);
-      callback(token)
-    } else if(results.uuid === decodedToken.uuid && timeSinceUpdate<= 24*60*60){
+      let resObj ={
+            token,
+            success:true
+        }
+      callback(resObj)
+    } else if(results.uuid === decodedToken.uuid /*&& timeSinceUpdate<= 24*60*60*/){
       //if over 6 hours but within 24hours generate new key to use and callback with it
       acctManager.createNewUuid(results, (newUuid)=> {
         let token = jwt.sign({
@@ -136,75 +143,80 @@ acctManager.checkUuid = (userInfo, callback)=>{
           uuid:newUuid,
           name:decodedToken.name
         }, secret.secret);
-        callback(token)
+        let resObj ={
+            token,
+            success:true
+        }
+        callback(resObj)
       })
     }else{
       //if incorrect or older than 24 hours return to login screen
       callback({
         msg:"invalid token",
         success:false
-      }, true)
+      })
     }
   })
 }
+acctManager.comparePassword = (req, callback) => {
+    console.log(req.body.name)
+    db.User.findOne({
+       where:{ 
+            name:req.body.name
+           }
+    }).then((userDbInfo)=>{
+        bcrypt.compare(req.body.password, userDbInfo.pw_hash, (err, matched) => {
+        //if matches update with new uuid
+            const newUuid = uuidv4();
+            let resObj;
+            if (matched) {
+                db.User.update({
+                    uuid: newUuid
+                }, {
+                    where: {
+                        id: userDbInfo.id
+                    }
+                }).then(data => {
+                    let token = jwt.sign({
+                        id: userDbInfo.id,
+                        uuid: newUuid,
+                        name: userDbInfo.name
+                    }, secret.secret);
+                    //return new uuid to browser 
+                    resObj = {
+                        msg: "login successfull",
+                        success: true,
+                        id: userDbInfo.id,
+                        token,
+                        uuid: newUuid,
+                        name: userDbInfo.name,
+                    }
+                    callback(resObj)
+                }).catch(err => {
+                    console.log(err)
+                    resObj = {
+                        msg: "login failed",
+                        success: false
+                    }
+                    callback(resObj)
+                })
+            } else {
+                //if failed send response
+                resObj = {
+                    msg: "login failed",
+                    success: false,
+                }
+                callback(resObj)
+            } //else
 
-acctManager.comparePassword = (req, callback, userDbInfo)=>{
-  bcrypt.compare(req.body.password, userDbInfo.pw_hash, (err, matched)=>{
-      //if matches update with new uuid
-      let newUuid = uuidv4();
-      let resObj;
-      if(matched){
-        
-        db.User.update({
-          uuid:newUuid
-        }, {
-          where:{
-            id:userDbInfo.id
-          }
-        }).then((data)=>{
-          let token = jwt.sign({
-          id:userDbInfo.id,
-          uuid:newUuid,
-          name:userDbInfo.name
-        }, secret.secret);
-          //return new uuid to browser 
-          resObj={
-            msg:"login successfull",
-            success:true,
-            id:userDbInfo.id,
-            token,
-            uuid:newUuid,
-            name:userDbInfo.name,
-          }
-           callback(resObj)
-        }).catch((err)=>{
-          console.log(err)
-          resObj={
-            msg:"login failed",
-            success:false
-          }
-           callback(resObj)
+        }) //compare
+    }).catch(data => {
+       callback({
+            msg: "password does not match",
+            success: false
         })
-      } else{
-        //if failed send response
-        resObj={
-            msg:"login failed",
-            success:false,
-          }
-           callback(resObj)
-      }//else
-     
-    })//compare
+    })
 }
-
-acctManager.checkToken = (token, callback)=>{
-  let decodedToken = jwt.verify(token, secret.secret);
-  try {
-    let decodedToken = jwt.verify(token, secret.secret);
-  } catch(err) {
-    callback(err, true)
-  }
-  callback(decodedToken)
-}
+    
 
 module.exports = acctManager;
