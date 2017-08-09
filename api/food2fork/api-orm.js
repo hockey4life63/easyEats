@@ -29,7 +29,7 @@ var f2fOrm = {
 		request(finalURL, function(error, response, body) {
 			callback(f2fOrm.convertBodyArray(JSON.parse(body).recipes));
 		});
-	}
+	},
 	// search needs to be formatted as an array
 	userSearch: function(search, callback) {
 		var finalURL = f2fBaseURL + "&q=" + search.join("+");

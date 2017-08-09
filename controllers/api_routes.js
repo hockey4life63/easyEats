@@ -99,104 +99,65 @@ router.get("/trendingRecipes", (req, res)=>{
     });
 });
 
-// Search by recipe from food2fork api & recipe puppy api
-router.get("/search/:recipe", (req, res)=>{
-    var recipeArr = req.params.recipe.split(",");
-    rpOrm.searchByRecipe(recipeArr, (results1)=>{
-        f2fOrm.userSearch(recipeArr, (results2)=>{
-            var combinedResults = [];
-            for (var i = 0; i < 6; i++) {
-                combinedResults.push(results1[i]);
-                combinedResults.push(results2[i]);
-            }
-            res.render(combinedResults);
-        });
-    });
-});
-
-// Search by ingredients from recipe puppy api
-router.get("/search/:ingredients", (req, res)=>{
-    rpOrm.searchByIngredients(req.params.ingredients, (results)=>{
-        res.render(results);
-    });
-});
-
-// Search by username from mysql database of user-submitted recipes
-router.get("/search/:username", (req, res)=>{
-    dbOrm.findUserRecipe(req.params.username, (results)=>{
-        res.render(results);
-    });
-})
-
-// Search by recipe and ingredients from recipe puppy api
-router.get("/search/:recipe/:ingredients", (req, res)=>{   
-    rpOrm.searchByRecipeAndIngredients(req.params.recipe, req.params.ingredients, (results)=>{
-        res.render(results);
-    });
-});
-
-// Search by recipe and username from mysql database
-router.get("/search/:recipe/:username", (req, res)=>{
-    // method for querying db by recipe
-});
-
-// Search by ingredients and username from mysql database
-router.get("/search/:ingredients/:username", (req, res)=>{
-    // method for querying db by ingredients
-});
-
 // Initial routing to occur when user has option to search by all 3 parameters
 router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
     let recipe = req.params.recipe==="null"?null:req.params.recipe;
-    let ingredients = req.params.ingredients==="null"?null:req.params.ingredients;
+    let ingredients = req.params.ingredients==="null"?null:req.params.ingredients.split(",");
     let username = req.params.username==="null"?null:req.params.username;
 
     if(!recipe&&!ingredients&&!username){
         //send error
+        console.log("Null");
     } else if(recipe && ingredients && username){
         //search with all
+        console.log("Searching by recipe, ingredients, and username");
     }else if(recipe){   
         if(ingredients){
             //search recipe/ingredidents
+            console.log("Searching by recipe and ingredients");
+            console.log("Recipe: " + recipe);
+            rpOrm.searchByRecipeAndIngredients(recipe, ingredients, (results)=>{
+                res.render("recipe_search", {recipe:results});
+            });
         } else if(username){
             //search recipe/username
+            console.log("Searching by username and recipe");
         } else{
             // search recipe
+            console.log("Searching by recipe only")
+            var recipeArr = req.params.recipe.split(",");
+            rpOrm.searchByRecipe(recipeArr, (results1)=>{
+                f2fOrm.userSearch(recipeArr, (results2)=>{
+                    var combinedResults = [];
+                    for (var i = 0; i < 6; i++) {
+                        combinedResults.push(results1[i]);
+                        combinedResults.push(results2[i]);
+                    }
+                    res.render("recipe_search", {recipe:combinedResults});
+                });
+            });
         }
     } else if(ingredients){
         if(username){
             //search ingredidents/username
+            console.log("Searching by username and ingredients");
         }else{
             //search ingredidents
+            console.log("Searching by ingredients only");
+            rpOrm.searchByIngredients(req.params.ingredients, (results)=>{
+                console.log(results);
+
+                res.render("recipe_search", {recipe:results});
+            });
         }
     } else{
         //username
+        console.log("Searching by username only");
+        dbOrm.findUserRecipe(req.params.username, (results)=>{
+            res.render("recipe_search", {recipe:results});
+        });
     }
 
-    if (req.params.recipe === "null" && req.params.ingredients === "null" && req.params.username === "null") {
-        throw (err);
-    }
-    else if (req.params.recipe === "null" && req.params.ingredients === "null" && req.params.username !== "null") {
-        // redirect to searching only by username
-    }
-    else if (req.params.recipe === "null" && req.params.ingredients !== "null" && req.params.username === "null") {
-        // redirect to searching only by ingredients
-    }
-    else if (req.params.recipe !== "null" && req.params.ingredients === "null" && req.params.username === "null") {
-        // redirect to searching only by recipe
-    }
-    else if (req.params.recipe === "null" && req.params.ingredients !== "null" && req.params.username !== "null") {
-        // redirect to searching by username and ingredients
-    }
-    else if (req.params.recipe !== "null" && req.params.ingredients === "null" && req.params.username !== "null") {
-        // redirect to searching by username and recipe
-    }
-    else if (req.params.recipe !== "null" && req.params.ingredients !== "null" && req.params.username === "null") {
-        // redirect to searching by recipe and ingredients
-    }
-    else if (req.params.recipe !== "null" && req.params.ingredients !== "null" && req.params.username !== "null") {
-        // search by all parameters
-    }
 });
 
 module.exports = router;
