@@ -8,6 +8,11 @@ const rpOrm = require("../api/recipe-puppy/api-Orm");
 const acctManager = require("../password_auth/acctManager");
 
 
+const buildScriptTag = (scriptName)=>{
+    let scriptTag = '<script src="public/asset/js/${scriptName}"></script>'
+    return scriptTag;
+}
+
 let router =express.Router();
 
 
@@ -142,6 +147,32 @@ router.get("/search/:ingredients/:username", (req, res)=>{
 
 // Initial routing to occur when user has option to search by all 3 parameters
 router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
+    let recipe = req.params.recipe==="null"?null:req.params.recipe;
+    let ingredients = req.params.ingredients==="null"?null:req.params.ingredients;
+    let username = req.params.username==="null"?null:req.params.username;
+
+    if(!recipe&&!ingredients&&!username){
+        //send error
+    } else if(recipe && ingredients && username){
+        //search with all
+    }else if(recipe){   
+        if(ingredients){
+            //search recipe/ingredidents
+        } else if(username){
+            //search recipe/username
+        } else{
+            // search recipe
+        }
+    } else if(ingredients){
+        if(username){
+            //search ingredidents/username
+        }else{
+            //search ingredidents
+        }
+    } else{
+        //username
+    }
+
     if (req.params.recipe === "null" && req.params.ingredients === "null" && req.params.username === "null") {
         throw (err);
     }
