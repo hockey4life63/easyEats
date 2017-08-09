@@ -117,7 +117,12 @@ router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
             console.log("Searching by recipe and ingredients");
             console.log("Recipe: " + recipe);
             rpOrm.searchByRecipeAndIngredients(recipe, ingredients, (results)=>{
-                res.render("recipe_search", {recipe:results});
+                if (results === null) {
+                    res.render("no_results");
+                }
+                else {
+                    res.render("recipe_search", {recipe:results});   
+                }
             });
         } else if(username){
             //search recipe/username
@@ -133,7 +138,12 @@ router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
                         combinedResults.push(results1[i]);
                         combinedResults.push(results2[i]);
                     }
-                    res.render("recipe_search", {recipe:combinedResults});
+                    if (results1 || results2 === null) {
+                        res.render("no_results");
+                    }
+                    else {
+                        res.render("recipe_search", {recipe:combinedResults});
+                    }
                 });
             });
         }
@@ -146,15 +156,24 @@ router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
             console.log("Searching by ingredients only");
             rpOrm.searchByIngredients(req.params.ingredients, (results)=>{
                 console.log(results);
-
-                res.render("recipe_search", {recipe:results});
+                if (results === null) {
+                    res.render("no_results");
+                }
+                else {
+                    res.render("recipe_search", {recipe:results});   
+                }
             });
         }
     } else{
         //username
         console.log("Searching by username only");
-        dbOrm.findUserRecipe(req.params.username, (results)=>{
-            res.render("recipe_search", {recipe:results});
+        dbOrm.findUserRecipe(req.params.username, (results)=>{ 
+            if (results === null) {
+                res.render("no_results");
+            }
+            else {
+                res.render("recipe_search", {recipe:results});   
+            }
         });
     }
 

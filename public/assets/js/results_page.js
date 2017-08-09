@@ -9,7 +9,7 @@ $("#submit-btn").on("click", function(event) {
         ingredients = "null";
     }
     else {
-        var ingredientsArr = $("#ingredient-field").val().trim().split(",");
+        var ingredientsArr = $("#ingredient-field").val().trim().split(", ");
         for (var i = 0; i < ingredientsArr.length; i++) {
             ingredientsArr[i].replace(/\s/g, "+");
         }
