@@ -1,5 +1,5 @@
   (function() {
-    'use strict';
+    //'use strict';
     var dialogButton = document.querySelector('.dialog-button');
     var dialog = document.querySelector('#dialog');
     if (! dialog.showModal) {
@@ -12,4 +12,4 @@
     .addEventListener('click', function() {
       dialog.close();
     });
-  }());
+  })();

@@ -7,7 +7,8 @@ body {
 .mdl-dialog {
   border: none;
   box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
-  width: 280px; 
+  width: 680px; 
+  height: 500px
 }
 
 .mdl-dialog__title {
@@ -41,7 +42,7 @@ body {
   padding: 0 0 8px 0; 
 }
 .mdl-dialog__actions--full-width > * {
-  height: 48px;
+  height: 58px;
   -webkit-flex: 0 0 100%;
       -ms-flex: 0 0 100%;
           flex: 0 0 100%;
