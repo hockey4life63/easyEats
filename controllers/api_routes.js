@@ -123,6 +123,13 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
             console.log("Searching by recipe and ingredients");
             console.log("Recipe: " + recipe);
             rpOrm.searchByRecipeAndIngredients(recipe, ingredients, offset, (results)=>{
+            console.log("results", results);
+            results = results.map(ele=>{
+                console.log(ele.thumbnail, ele.thumbnail === "");
+                ele.thumbnail =  (ele.thumbnail !== "") ? ele.thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+                return ele;
+            });
+                       console.log("results", results);
                 if (results === null) {
                     res.render("no_results");
                 }
@@ -150,7 +157,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
                         combinedResults.push(results2[i+singlePageOffset]);
 
                     }
-                    if (results1 || results2 === null) {
+                    if (results1 === null || results2 === null) {
                         res.render("no_results");
                     }
                     else {
@@ -170,6 +177,9 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
             //search ingredidents
             console.log("Searching by ingredients only");
             rpOrm.searchByIngredients(req.params.ingredients, offset, (results)=>{
+                results = results.map(ele=>{
+                    ele.thumbnail =  (ele.thumbnail) ? ele.thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+                });
                 console.log(results);
                 if (results === null) {
                     res.render("no_results");
