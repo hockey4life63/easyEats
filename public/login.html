@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>EasyEats</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-pink.min.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css" />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
 
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -36,12 +36,17 @@
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
                     <label  class="mdl-textfield__label mdl-color-text--grey" for="textfield_username">Username</label>
-                    <input  class="mdl-textfield__input" type="text" id="textfield_username" value = "jon" name="username"/>
+                    <input  class="mdl-textfield__input" type="text" id="textfield_username" value = "jon" name="username" required="true" pattern= "^[a-z0-9_-]{3,15}$" />
+                    <span class="mdl-textfield__error">3-15 characters with only lowercase letters, digits, underscore, and hyphen</span>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
                     <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_password">Password</label>
-                    <input class="mdl-textfield__input" type="password" id="textfield_password" value ="password" name="password"/>
+                    <input class="mdl-textfield__input" type="password" id="textfield_password" value ="password" name="password" required="true" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})"/>
+                    <span class="mdl-textfield__error">
+                        6-20 characters with at least a digit, lowercase and uppercase letters,
+                        and special symbol in @#$%
+                    </span>
 
                 </div>
 
