@@ -23,6 +23,23 @@ const _buildCommentTree = (commentArray, callback)=>{
     callback(returnArray)
 }
 
+const _addPrecentSigns = (word)=>{
+    return "%"+word+"%";
+}
+
+const _buildObject = (property) =>{
+   return function (string) { let retObj = {};
+       retObj[property] = _addPrecentSigns(string);
+       return retObj;
+   }
+}
+
+const _wrapInObject = (objectKey, object) =>{
+    let retObj = {};
+    retObj[objectKey] = object;
+    return retObj;
+}
+
 const findRecipeId = (recipeObj, callback)=>{
     db.Recipe.findOrCreate({
         where:{
@@ -170,6 +187,27 @@ const findUserRecipeByName = (username, callback)=>{
     
 }
 
+const findUserRecipeByIngredient = (ingredients, callback)=>{
+    let buildOrArr = _buildObject("$like")
+    const andArr = ingredients.map((element)=>{
+        console.log(element)
+        return _wrapInObject("ingredients", buildOrArr(element))
+    });
+    console.log(andArr)
+    db.Recipe.findAll({
+        where:{
+            $and:{
+                user_recipe:true,
+                $or:andArr
+            }
+        }
+    }).then((results)=>{
+        results.forEach((element)=>{
+            console.log("ingredients:",element.dataValues.ingredients)
+        })
+    }).catch(err=>console.log(err))
+}
+
 const findRecipeStarCount = (RecipeId, callback)=> {
    db.Stared.count({
     where:{
@@ -250,25 +288,29 @@ const _testAddRecipe = ()=>{
           title:"test1 article1",
           ingredients:"test1,test2,test3",
           img_url:"test1 img",
-          source_url:"test1 src url"
+          source_url:"test1 src url",
+          user_recipe:true
         },
         {
           title:"test1 article2",
-          ingredients:"test1,test2,test3",
+          ingredients:"test1",
           img_url:"test2 img",
-          source_url:"test2 src url"
+          source_url:"test2 src url",
+          user_recipe:true
         },
         {
           title:"test1 article3",
-          ingredients:"test1,test2,test3",
+          ingredients:"test2",
           img_url:"test3 img",
-          source_url:"test3 src url"
+          source_url:"test3 src url",
+          user_recipe:true
         },
         {
           title:"test1 article3",
-          ingredients:"test1,test2,test3",
+          ingredients:"test3",
           img_url:"test3 img",
-          source_url:"test3 src url"
+          source_url:"test3 src url",
+          user_recipe:true
         }
     ]
     objArray.forEach( function(element, index) {
@@ -318,6 +360,7 @@ module.exports ={
     getAllComments,
     findRecipe,
     findUserRecipe,
-    findUserRecipeByName
+    findUserRecipeByName,
+    findUserRecipeByIngredient
 }
 
