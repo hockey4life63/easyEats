@@ -17,7 +17,7 @@ router.post("/signup", (req, res) =>acctManager.createAcct(req.body, results => 
 router.post("/signin", (req, res) => {acctManager.comparePassword(req,results=>res.json(results))})
 
 router.post("/check", (req, res) => {
-    //body needs uuid and name
+    //body needs token
     acctManager.checkUuid(req.body, response => {
         if(response.success){
             const resObj = {

@@ -10,46 +10,7 @@ const acctManager = require("../password_auth/acctManager")
 
 let router =express.Router();
 router.get("/", (req, res)=>{
-  res.sendFile(path.join(__dirname ,"/../html/signup.html"))
-})
-
-router.get("/test", (req, res)=>{
-  let testObj = {
-    recipe:[
-    {
-      name:"test1",
-      img_url:"http://via.placeholder.com/300x200",
-      ingredients:"thing1, thing2, thing3",
-      src_url:"https://example.com"
-    },
-    {
-      name:"test1",
-      img_url:"http://via.placeholder.com/300x200",
-      ingredients:"thing1, thing2, thing3",
-      src_url:"https://example.com"
-    },
-    {
-      name:"test1",
-      img_url:"http://via.placeholder.com/300x200",
-      ingredients:"thing1, thing2, thing3",
-      src_url:"https://example.com"
-    },
-    {
-      name:"test1",
-      img_url:"http://via.placeholder.com/300x200",
-      ingredients:"thing1, thing2, thing3",
-      src_url:"https://example.com"
-    },
-    {
-      name:"test1",
-      img_url:"http://via.placeholder.com/300x200",
-      ingredients:"thing1, thing2, thing3",
-      src_url:"https://example.com"
-    }
-
-    ]
-  }
-  res.render("recipe_search", testObj)
+  res.sendFile(path.join(__dirname, "../public/home.html"))
 })
 
 router.get("/signup", (req,res)=>{
@@ -57,21 +18,16 @@ router.get("/signup", (req,res)=>{
 })
 
 router.get("/search", (req, res)=>{
-
-    //render search page
+    res.sendFile(path.join(__dirname, "../public/searchByAllThree.html"))
 })
 
-router.post("/search", (req, res)=>{
-  //parse data is needed
-  //call search api
-  //render results to page
+router.get("/search/ingredient", (req, res)=>{
+  res.sendFile(path.join(__dirname, "../public/searchByIngredient.html"))
 })
-//TESTING ROUTE ONLY//
-// router.get("/:file",(req, res)=>{
-//   console.log(req.params)
-//   let redirectPath="/"+req.params.file+".html";
-//   res.sendFile(path.join(__dirname, "/../html/"+redirectPath))
-// })
+
+router.get("/search/author", (req, res)=>{
+    res.sendFile(path.join(__dirname, "../public/searchByAuthor.html"))
+})
 
 module.exports = router;
 
