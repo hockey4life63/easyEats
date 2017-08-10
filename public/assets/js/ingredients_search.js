@@ -11,5 +11,5 @@ $("#search-btn").on("click", function(event) {
         }
         ingredients = ingredientsArr.toString();
     }
-    window.location = "/api/search/null/" + ingredients + "/null";
+    window.location = "/api/search/null/" + ingredients + "/null/0";
 });

@@ -35,6 +35,6 @@ $("#submit-btn").on("click", function(event) {
         alert("Please fill out one or more search fields before submitting your search.");
     }
 
-    window.location = "/api/search/" + recipe + "/" + ingredients + "/" + username;
+    window.location = "/api/search/" + recipe + "/" + ingredients + "/" + username + "/0";
    
 });
