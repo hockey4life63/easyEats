@@ -117,13 +117,13 @@ acctManager.checkUuid = (userInfo, callback)=>{
   }).then(results=>{
 
     //records time since last update
-    let timeSinceUpdate = moment().diff(moment(userInfo.updatedAt), "seconds")
+    let timeSinceUpdate = moment().diff(moment(results.updatedAt), "seconds")
     if(results===null){
         callback({
         msg:"invalid token",
         success:false
       })
-    } else if(results.uuid === decodedToken.uuid /*&& timeSinceUpdate <=6*60*60*/){
+    } else if(results.uuid === decodedToken.uuid && timeSinceUpdate <=6*60*60){
       //if within last 6 hours callback with same uuid
       let token = jwt.sign({
           id:decodedToken.id,
@@ -135,7 +135,7 @@ acctManager.checkUuid = (userInfo, callback)=>{
             success:true
         }
       callback(resObj)
-    } else if(results.uuid === decodedToken.uuid /*&& timeSinceUpdate<= 24*60*60*/){
+    } else if(results.uuid === decodedToken.uuid && timeSinceUpdate<= 24*60*60){
       //if over 6 hours but within 24hours generate new key to use and callback with it
       acctManager.createNewUuid(results, (newUuid)=> {
         let token = jwt.sign({

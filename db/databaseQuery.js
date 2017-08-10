@@ -119,6 +119,57 @@ const findUserRecipe = (UserId, callback)=>{
     })
 }
 
+const findUserId = (username, callback)=>{
+    db.User.findOne({
+        where:{
+            name:username
+        }
+    }).then(results=>callback(results.id))
+    .catch((err)=>{
+            callback(err, true)
+    })
+}
+const findUserRecipeByName2 = (username, callback)=>{
+    findUserId(username, (userId, err)=>{
+        if(err){
+            callback({
+                msg:"error finding user id",
+                success:false
+            },true)
+        } else{
+            findUserRecipe(userid, (results, err)=>{
+                if(err){
+                    callback({
+                    msg:"error finding user id",
+                    success:false
+                },true)
+            }
+        })
+        }
+    })
+}
+
+const findUserRecipeByName = (username, callback)=>{
+    findUserId(username, (UserId, err)=>{
+        if(err){
+            callback({
+                msg:"database err",
+                success:false
+            }, true)
+        }
+        db.Recipe.findAll({
+        where:{
+            UserId
+            }
+        }).then(results =>{
+            callback(results)
+        }).catch((err)=>{
+            callback(err, true)
+        })
+    })
+    
+}
+
 const findRecipeStarCount = (RecipeId, callback)=> {
    db.Stared.count({
     where:{
@@ -266,6 +317,7 @@ module.exports ={
     addComment,
     getAllComments,
     findRecipe,
-    findUserRecipe
+    findUserRecipe,
+    findUserRecipeByName
 }
 

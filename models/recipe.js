@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
     source_url:{
       type:DataTypes.STRING
     },
-     recipe_steps:{
+    recipe_steps:{
       type:DataTypes.TEXT
     },
     user_recipe: {
