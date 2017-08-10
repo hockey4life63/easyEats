@@ -100,10 +100,16 @@ router.get("/trendingRecipes", (req, res)=>{
 });
 
 // Initial routing to occur when user has option to search by all 3 parameters
-router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
+router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
+    
     let recipe = req.params.recipe==="null"?null:req.params.recipe;
     let ingredients = req.params.ingredients==="null"?null:req.params.ingredients.split(",");
     let username = req.params.username==="null"?null:req.params.username;
+    let offset = parseInt(req.params.page);
+    let totalOffset = offset*10;
+    let singlePageOffset = totalOffset%30;
+    totalOffset = totalOffset/30;
+    let nextUrl = `/api/search/${req.params.recipe}/${req.params.ingredients}/${req.params.username}/${offset+1}`;
 
     if(!recipe&&!ingredients&&!username){
         //send error
@@ -116,12 +122,15 @@ router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
             //search recipe/ingredidents
             console.log("Searching by recipe and ingredients");
             console.log("Recipe: " + recipe);
-            rpOrm.searchByRecipeAndIngredients(recipe, ingredients, (results)=>{
+            rpOrm.searchByRecipeAndIngredients(recipe, ingredients, offset, (results)=>{
                 if (results === null) {
                     res.render("no_results");
                 }
                 else {
-                    res.render("recipe_search", {recipe:results});   
+                    res.render("recipe_search", {
+                recipe:results,
+                nextPage: nextUrl
+            });   
                 }
             });
         } else if(username){
@@ -129,20 +138,26 @@ router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
             console.log("Searching by username and recipe");
         } else{
             // search recipe
-            console.log("Searching by recipe only")
+            console.log("Searching by recipe only1")
             var recipeArr = req.params.recipe.split(",");
-            rpOrm.searchByRecipe(recipeArr, (results1)=>{
-                f2fOrm.userSearch(recipeArr, (results2)=>{
+            rpOrm.searchByRecipe(recipeArr,offset, (results1)=>{
+                f2fOrm.userSearch(recipeArr,totalOffset, (results2)=>{
                     var combinedResults = [];
-                    for (var i = 0; i < 6; i++) {
+                    for (var i = 0; i < 5; i++) {
+                       results1[i].thumbnail =  (results1[i].thumbnail) ? results1[i].thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+                        results2[i].thumbnail =(results2[i].thumbnail) ? results2[i].thumbnail :"https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
                         combinedResults.push(results1[i]);
-                        combinedResults.push(results2[i]);
+                        combinedResults.push(results2[i+singlePageOffset]);
+
                     }
                     if (results1 || results2 === null) {
                         res.render("no_results");
                     }
                     else {
-                        res.render("recipe_search", {recipe:combinedResults});
+                        res.render("recipe_search", {
+                            recipe:combinedResults,
+                            nextPage:nextUrl
+                        });
                     }
                 });
             });
@@ -154,13 +169,16 @@ router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
         }else{
             //search ingredidents
             console.log("Searching by ingredients only");
-            rpOrm.searchByIngredients(req.params.ingredients, (results)=>{
+            rpOrm.searchByIngredients(req.params.ingredients, offset, (results)=>{
                 console.log(results);
                 if (results === null) {
                     res.render("no_results");
                 }
                 else {
-                    res.render("recipe_search", {recipe:results});   
+                    res.render("recipe_search", {
+                recipe:results,
+                nextPage: nextUrl
+            });   
                 }
             });
         }
@@ -172,7 +190,10 @@ router.get("/search/:recipe/:ingredients/:username", (req, res)=>{
                 res.render("no_results");
             }
             else {
-                res.render("recipe_search", {recipe:results});   
+                res.render("recipe_search", {
+                recipe:results,
+                nextPage: nextUrl
+            });   
             }
         });
     }

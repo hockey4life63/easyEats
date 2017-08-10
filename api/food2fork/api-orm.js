@@ -1,6 +1,11 @@
 var keys = require("../../keys");
 var request = require("request");
+let page = 1;
+const pageUrl = "&page=";
 
+const buildPageUrl = (pageOffset)=>{
+	return pageUrl+parseInt(page)+parseInt(pageOffset);
+}
 
 //====Food2Fork.com====//     (returns 30 recipes to a page)
 var f2fBaseURL = "http://food2fork.com/api/search?key=" + keys.food2fork_key;
@@ -31,8 +36,9 @@ var f2fOrm = {
 		});
 	},
 	// search needs to be formatted as an array
-	userSearch: function(search, callback) {
+	userSearch: function(search, pageOffset, callback) {
 		var finalURL = f2fBaseURL + "&q=" + search.join("+");
+		finalURL += buildPageUrl(pageOffset);
 		console.log(finalURL);
 		request(finalURL, function(error, response, body) {
 			callback(f2fOrm.convertBodyArray(JSON.parse(body).recipes));
