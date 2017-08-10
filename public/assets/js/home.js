@@ -9,5 +9,5 @@ $("#search1").on("click", function() {
         var recipeArr = $("#user-input").val().trim().split(" ");
         recipe = recipeArr.join("+");
     }
-    window.location = "/api/search/" + recipe + "/null/null";
+    window.location = "/api/search/" + recipe + "/null/null/0";
 });

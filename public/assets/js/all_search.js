@@ -18,6 +18,6 @@ $("#all-search").on("click", function() {
     username = $("#all-author").val().trim();
   }
 
-  window.location = "/api/search/" + recipe + "/" + ingredients + "/" + username;
+  window.location = "/api/search/" + recipe + "/" + ingredients + "/" + username + "/0";
 
 });
