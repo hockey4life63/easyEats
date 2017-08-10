@@ -4,7 +4,7 @@ let page = 1;
 const pageUrl = "&page=";
 
 const buildPageUrl = (pageOffset)=>{
-	return pageUrl+parseInt(page)+parseInt(pageOffset);
+	return pageUrl+(parseInt(page)+parseInt(pageOffset));
 }
 
 //====Food2Fork.com====//     (returns 30 recipes to a page)

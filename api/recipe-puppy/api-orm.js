@@ -6,7 +6,7 @@ let page = 1;
 const pageUrl = "&p=";
 
 const buildPageUrl = (pageOffset)=>{
-	return pageUrl+parseInt(page)+parseInt(pageOffset);
+	return pageUrl+(parseInt(page)+parseInt(pageOffset));
 }
 var rpOrm = {
 
