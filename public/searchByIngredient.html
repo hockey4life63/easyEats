@@ -3,9 +3,13 @@
 <html>
   <head>
     <meta charset = "UTF-8">
-    <title>Simple Material Design</title>
+    <title>Search By Ingredient</title>
 
-    
+    <script 
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css" />
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <style type="text/css">
@@ -71,14 +75,14 @@
         <div class="test1 mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         
         <!-- class "mdl-textfield__input" -->
-        <input class="mdl-textfield__input" type="text" id="search-btn" />
+        <input class="mdl-textfield__input" type="text" id="search-field" />
   
           <!-- class "mdl-textfield__label" -->
           <label class="mdl-textfield__label" for="demo-input">Please type the name of the ingredient...</label>
   
           </div>
 
-          <button class=" test2 mdl-button mdl-js-button mdl-button--icon" id ="search-field">
+          <button class=" test2 mdl-button mdl-js-button mdl-button--icon" id ="search-btn">
             <i class="material-icons">search</i>
           </button>
       </div>
@@ -86,5 +90,6 @@
       </form>
       </main>
   </div>
+  <script type="text/javascript" src="/public/assets/js/ingredients_search.js"></script>
   </body>
 </html>
