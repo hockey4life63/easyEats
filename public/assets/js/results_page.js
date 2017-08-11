@@ -41,6 +41,7 @@ $("#submit-btn").on("click", function(event) {
    
 });
 
+// Login Modal //
 var dialog1 = document.querySelector("#dialog1");
 var showDialog1Button1 = document.querySelector("#show-dialog1-1");
 var showDialog1Button2 = document.querySelector("#show-dialog1-2");
@@ -57,6 +58,7 @@ dialog1.querySelector(".close").addEventListener("click", function() {
   dialog1.close();
 });
 
+// Signup Modal //
 var dialog2 = document.querySelector("#dialog2");
 var showDialog2Button1 = document.querySelector("#show-dialog2-1");
 var showDialog2Button2 = document.querySelector("#show-dialog2-2");
@@ -73,3 +75,15 @@ dialog2.querySelector(".close").addEventListener("click", function() {
   dialog2.close();
 });
 
+// Results Modals //
+var dialog3 = document.querySelector("#dialog3");
+var showDialog3Button = document.querySelector("#show-dialog3");
+if (! dialog3.showModal) {
+  dialogPolyfill.registerDialog(dialog3);
+}
+showDialog3Button.addEventListener("click", function() {
+  dialog3.showModal();
+});
+dialog3.querySelector(".close").addEventListener("click", function() {
+  dialog3.close();
+});
