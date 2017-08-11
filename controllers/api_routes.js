@@ -3,8 +3,8 @@ const exphbs = require("express-handlebars");
 const db = require("../models");
 const path = require("path");
 const dbOrm = require("../db/databaseQuery");
-const f2fOrm = require("../api/food2fork/api-Orm");
-const rpOrm = require("../api/recipe-puppy/api-Orm");
+const f2fOrm = require("../api/food2fork/api-orm");
+const rpOrm = require("../api/recipe-puppy/api-orm");
 const acctManager = require("../password_auth/acctManager");
 
 
