@@ -1,4 +1,4 @@
-$("#author-name-button").on("click", function() {
+$("#author-search").on("click", function() {
     var username;
     if ($("#author-name").val().trim() === "") {
         alert("Please complete the search field before submitting your search");
