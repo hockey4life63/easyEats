@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <!-- <link rel="stylesheet" href="assets/css/modal_style.css" /> -->
 
 <!-- Uses a transparent header that draws on top of the layout's background -->
 <style>
@@ -72,12 +73,12 @@ button.capitalize {
         <a class="mdl-navigation__link" href="/search/ingredient">Search by Ingredient</a>
         <a class="mdl-navigation__link" href="/search/username" >Seach by Username</a>
         <a class="mdl-navigation__link" href="/search/all">Search by All</a>
-        <button class="capitalize mdl-button mdl-js-button">
-      Login
-    </button>
-    <button class="capitalize mdl-button mdl-js-button">
-      Sign Up
-    </button>
+        <button type="button" id="show-dialog1-1" class="capitalize mdl-button mdl-js-button">
+          Login
+        </button>
+        <button id="show-dialog2-1" type="button" class="capitalize mdl-button mdl-js-button">
+          Sign Up
+        </button>
         <!-- <a class="mdl-navigation__link" href="">Login</a>
         <a class="mdl-navigation__link" href="">Sign Up</a> -->
       </nav>
@@ -100,10 +101,10 @@ button.capitalize {
     <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
       Add a Recipe
     </button>
-        <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+    <button type="button" id="show-dialog1-2" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
       Login
     </button>
-    <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+    <button type="button" id="show-dialog2-2" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
       Sign Up
     </button>
     <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
@@ -140,7 +141,103 @@ button.capitalize {
     </div>
   </main>
 </div>
-<script type="text/javascript" src="/public/assets/js/home.js"></script>
+
+<dialog id="dialog1" class="mdl-dialog">
+  <div class="mdl-grid mdl-dialog__content">
+    <div class="mdl-card mdl-shadow--16dp util-center util-spacing-h--40px">
+        <div class="mdl-card__title mdl-color--orange-800">
+            <h2 class="mdl-card__title-text mdl-color-text--white">User Login</h2>
+        </div>
+        <div class="mdl-card__supporting-text mdl-grid">
+            <b class="mdl-color-text--accent">Error message goes here</b>
+            <form method="POST" action="">
+                <input type="hidden" name="action" value="login" />
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                    <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_username">Username</label>
+                    <input class="mdl-textfield__input" type="text" id="textfield_username" value="jon" name="username" required="true" pattern="^[a-z0-9_-]{3,15}$" />
+                    <span class="mdl-textfield__error">3-15 characters with only lowercase letters, digits, underscore, and hyphen</span>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                    <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_password">Password</label>
+                    <input class="mdl-textfield__input" type="password" id="textfield_password" value="password" name="password" required="true" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})" />
+                    <span class="mdl-textfield__error">
+                        6-20 characters with at least a digit, lowercase and uppercase letters,
+                        and special symbol in @#$%
+                    </span>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col send-button" align="center">
+                    <button id="login1" type="submit" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--raised mdl-button--colored mdl-color--primary">
+                        Log In
+                    </button>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
+                    <a class="mdl-button--primary">Register now !</a>
+                </div>
+                <!-- <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
+          <a class="mdl-button--primary">Forgot password ?</a>
+        </div>   -->
+            </form>
+        </div>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="close mdl-button">Close</button>
+    </div>
+</div>
+</dialog>
+
+<dialog id="dialog2" class="mdl-dialog">
+  <div class="mdl-grid mdl-dialog__content">
+      <div class="mdl-card mdl-shadow--16dp util-center util-spacing-h--40px">
+          <div class="mdl-card__title mdl-color--orange-800">
+              <h2 class="mdl-card__title-text mdl-color-text--white">Create a New Account</h2>
+          </div>
+          <div class="mdl-card__supporting-text mdl-grid">
+
+              <b class="mdl-color-text--accent">Error message goes here</b>
+             
+
+              <form method="POST" action="">
+                  <input type="hidden" name="action" value="register"/>
+
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                      <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_new_username">Username</label>
+                      <input class="mdl-textfield__input" type="text" id="textfield_new_username" value ="jon" name="username" pattern="^[a-z0-9_-]{3,15}$"/>
+                      <span class="mdl-textfield__error">3-15 characters with only lowercase letters, digits, underscore, and hyphen</span>
+                  </div>
+
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                      <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_new_password">Password</label>
+                      <input class="mdl-textfield__input" type="password" id="textfield_new_password" value = "password" name="password"
+                              required = "true" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})"/>
+                      <span class="mdl-textfield__error">
+                          6-20 characters with at least a digit, lowercase and uppercase letters,
+                          and special symbol in @#$%
+                      </span>
+                  </div>
+
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
+                      <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_password_confirm">Password Confirm</label>
+                      <input class="mdl-textfield__input" type="password" id="textfield_password_confirm" value = "password" name="password_confirm"/>
+                  </div>
+
+                  <div class="mdl-cell mdl-cell--12-col send-button" align="center">
+                      <button class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--raised mdl-button--colored" id="login2">
+                          Register
+                      </button>
+                  </div>
+              </form>
+          </div>
+      </div>
+      <div class="mdl-dialog__actions">
+        <button type="button" class="close mdl-button">Close</button>
+      </div>
+  </div>
+</dialog>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.2/dialog-polyfill.min.js">
+</script>
+<script type="text/javascript" src="/public/assets/js/home.js">
+</script>
 </body>
 </html>
 
