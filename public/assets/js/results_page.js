@@ -33,8 +33,10 @@ $("#submit-btn").on("click", function(event) {
 
     if ($("#ingredient-field").val().trim() === "" && $("#recipe-field").val().trim() === "" && $("#username-field").val().trim() === "") {
         alert("Please fill out one or more search fields before submitting your search.");
+    } else{
+        window.location = "/api/search/" + recipe + "/" + ingredients + "/" + username + "/0";
     }
 
-    window.location = "/api/search/" + recipe + "/" + ingredients + "/" + username + "/0";
+    
    
 });
