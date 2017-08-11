@@ -1,6 +1,6 @@
 // Home screen search defaults to searching by recipe name
 
-$("#search1").on("click", function() {
+$("#home-search").on("click", function() {
     var recipe;
     if ($("#user-input").val().trim() === "") {
         alert("Please complete the search field before submitting your search");
