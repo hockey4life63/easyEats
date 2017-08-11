@@ -6,35 +6,32 @@ const dbOrm = require("../db/databaseQuery")
 const acctManager = require("../password_auth/acctManager")
 
 
-let router =express.Router();
+let router = express.Router();
 
-// router.get("/", (req, res)=>{
-//     //render login page
-// })
 
-router.post("/signup", (req, res) =>acctManager.createAcct(req.body, results => res.json(results)))
+router.post("/signup", (req, res) => acctManager.createAcct(req.body, results => res.json(results)))
 
-router.post("/signin", (req, res) => {acctManager.comparePassword(req,results=>res.json(results))})
+router.post("/signin", (req, res) => acctManager.comparePassword(req, results => res.json(results)))
 
 router.post("/check", (req, res) => {
     //body needs token
     acctManager.checkUuid(req.body, response => {
-        if(response.success){
+        if (response.success) {
             const resObj = {
-            name: req.body.name,
-            id: req.body.id,
-            token: response.token,
-            success: true,
-            msg: "Valid Session"
+                name: response.name,
+                id: response.id,
+                token: response.token,
+                success: true,
+                msg: "Valid Session"
             }
             res.json(resObj)
-        } else{
+        } else {
             res.json({
-                msg:"invalid token",
-                success:false
+                msg: "invalid token",
+                success: false
             })
         }
-        
+
     })
 })
 
