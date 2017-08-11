@@ -10,6 +10,7 @@ $("#search-btn").on("click", function(event) {
             ingredientsArr[i].replace(/\s/g, "+");
         }
         ingredients = ingredientsArr.toString();
+        window.location = "/api/search/null/" + ingredients + "/null/0";
     }
-    window.location = "/api/search/null/" + ingredients + "/null/0";
+    
 });

@@ -23,6 +23,39 @@ const _buildCommentTree = (commentArray, callback)=>{
     callback(returnArray)
 }
 
+const _addPrecentSigns = (word)=>{
+    return "%"+word+"%";
+}
+
+const _buildObject = (property) =>{
+   return function (string) { let retObj = {};
+       retObj[property] = _addPrecentSigns(string);
+       return retObj;
+   }
+}
+
+const _wrapInObject = (objectKey, object) =>{
+    let retObj = {};
+    retObj[objectKey] = object;
+    return retObj;
+}
+const _convertToRenderObject = (recipe)=>{
+    let retArr = {
+        title: recipe.title,
+        thumbnail:recipe.img_url,
+        href:"#",
+        ingredients:recipe.ingredients
+    }
+   
+        retArr.thumbnail =  (retArr.thumbnail && retArr.thumbnail.match(/\.(jpeg|jpg|gif|png)$/)) ? retArr.thumbnail:  "/public/assets/img/placeholder.png"
+
+    if(recipe.User.dataValues.name ){
+        retArr.userName = recipe.User.dataValues.name
+        retArr.UserId = recipe.User.dataValues.id
+    }
+    return retArr;
+}
+
 const findRecipeId = (recipeObj, callback)=>{
     db.Recipe.findOrCreate({
         where:{
@@ -129,25 +162,7 @@ const findUserId = (username, callback)=>{
             callback(err, true)
     })
 }
-const findUserRecipeByName2 = (username, callback)=>{
-    findUserId(username, (userId, err)=>{
-        if(err){
-            callback({
-                msg:"error finding user id",
-                success:false
-            },true)
-        } else{
-            findUserRecipe(userid, (results, err)=>{
-                if(err){
-                    callback({
-                    msg:"error finding user id",
-                    success:false
-                },true)
-            }
-        })
-        }
-    })
-}
+
 
 const findUserRecipeByName = (username, callback)=>{
     findUserId(username, (UserId, err)=>{
@@ -168,6 +183,100 @@ const findUserRecipeByName = (username, callback)=>{
         })
     })
     
+}
+
+const findUserRecipeByIngredient = (ingredients, callback)=>{
+    let buildOrArr = _buildObject("$like")
+    const andArr = ingredients.map((element)=>{
+        console.log(element)
+        return _wrapInObject("ingredients", buildOrArr(element))
+    });
+    console.log(andArr)
+    db.Recipe.findAll({
+        where:{
+            $and:{
+                user_recipe:true,
+                $or:andArr
+            }
+        }
+    }).then((results)=>{
+        results = results.map(_convertToRenderObject);
+        callback(results)
+    }).catch(err=>callback(err, true))
+}
+
+const findUserRecipeByIngredientAndName = (ingredients, name, callback)=>{
+    let buildOrArr = _buildObject("$like")
+    const andArr = ingredients.map((element)=>{
+        console.log(element)
+        return _wrapInObject("ingredients", buildOrArr(element))
+    });
+    db.Recipe.findAll({
+        where:{
+            $and:{
+                user_recipe:true,
+                $or:andArr,
+            }
+        },
+        include:{
+            model:db.User,
+            where:{
+                name
+            }
+        }
+    }).then((results)=>{
+        results = results.map(_convertToRenderObject);
+        callback(results)
+    }).catch(err=>callback(err, true))
+}
+
+const findUserRecipeByUserAndRecipe = ( name, recipeName, callback)=>{
+    let buildOrArr = _buildObject("$like")
+    let recipeNameObj = buildOrArr(recipeName)
+    db.Recipe.findAll({
+        where:{
+            $and:{
+                user_recipe:true,
+                title:recipeNameObj
+            }
+        },
+        include:{
+            model:db.User,
+            where:{
+                name
+            }
+        }
+    }).then((results)=>{
+        results = results.map(_convertToRenderObject);
+        callback(results)
+    }).catch(err=>callback(err, true))
+}
+
+const findUserRecipeByAll = (ingredients, name, recipeName, callback)=>{
+    let buildOrArr = _buildObject("$like")
+    const andArr = ingredients.map((element)=>{
+        console.log(element)
+        return _wrapInObject("ingredients", buildOrArr(element))
+    });
+    let recipeNameObj = buildOrArr(recipeName)
+    db.Recipe.findAll({
+        where:{
+            $and:{
+                user_recipe:true,
+                $or:andArr,
+                title:recipeNameObj
+            }
+        },
+        include:{
+            model:db.User,
+            where:{
+                name
+            }
+        }
+    }).then((results)=>{
+        results = results.map(_convertToRenderObject);
+        callback(results)
+    }).catch(err=>callback(err, true))
 }
 
 const findRecipeStarCount = (RecipeId, callback)=> {
@@ -250,25 +359,33 @@ const _testAddRecipe = ()=>{
           title:"test1 article1",
           ingredients:"test1,test2,test3",
           img_url:"test1 img",
-          source_url:"test1 src url"
+          source_url:"test1 src url",
+          user_recipe:true,
+          UserId:1
         },
         {
           title:"test1 article2",
-          ingredients:"test1,test2,test3",
+          ingredients:"test1",
           img_url:"test2 img",
-          source_url:"test2 src url"
+          source_url:"test2 src url",
+          user_recipe:true,
+          UserId:2
         },
         {
           title:"test1 article3",
-          ingredients:"test1,test2,test3",
+          ingredients:"test2",
           img_url:"test3 img",
-          source_url:"test3 src url"
+          source_url:"test3 src url",
+          user_recipe:true,
+          UserId:2
         },
         {
           title:"test1 article3",
-          ingredients:"test1,test2,test3",
+          ingredients:"test3",
           img_url:"test3 img",
-          source_url:"test3 src url"
+          source_url:"test3 src url",
+          user_recipe:true,
+          UserId:3
         }
     ]
     objArray.forEach( function(element, index) {
@@ -318,6 +435,10 @@ module.exports ={
     getAllComments,
     findRecipe,
     findUserRecipe,
-    findUserRecipeByName
+    findUserRecipeByName,
+    findUserRecipeByIngredient,
+    findUserRecipeByIngredientAndName,
+    findUserRecipeByUserAndRecipe,
+    findUserRecipeByAll
 }
 
