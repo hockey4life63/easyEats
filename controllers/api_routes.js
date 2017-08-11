@@ -150,7 +150,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
             //replace thumnail link with a placeholder img
             results = results.map(ele=>{
                 console.log(ele.thumbnail, ele.thumbnail === "");
-                ele.thumbnail =  (ele.thumbnail !== "") ? ele.thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+                ele.thumbnail =  (ele.thumbnail !== "") ? ele.thumbnail:  "/public/assets/img/placeholder.png"
                 return ele;
             });
                        console.log("results", results);
@@ -186,8 +186,8 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
                 f2fOrm.userSearch(recipeArr,totalOffset, (results2)=>{
                     var combinedResults = [];
                     for (var i = 0; i < 5; i++) {
-                       results1[i].thumbnail =  (results1[i].thumbnail) ? results1[i].thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
-                        results2[i].thumbnail =(results2[i].thumbnail) ? results2[i].thumbnail :"https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+                       results1[i].thumbnail =  (results1[i].thumbnail) ? results1[i].thumbnail:  "/public/assets/img/placeholder.png"
+                        results2[i].thumbnail =(results2[i].thumbnail) ? results2[i].thumbnail : "/public/assets/img/placeholder.png"
                         combinedResults.push(results1[i]);
                         combinedResults.push(results2[i+singlePageOffset]);
 
@@ -226,7 +226,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
             console.log("Searching by ingredients only");
             rpOrm.searchByIngredients(req.params.ingredients, offset, (results)=>{
                 results = results.map(ele=>{
-                    ele.thumbnail =  (ele.thumbnail) ? ele.thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+                    ele.thumbnail =  (ele.thumbnail) ? ele.thumbnail:  "/public/assets/img/placeholder.png"
                 });
                 console.log(results);
                 if (results === null) {

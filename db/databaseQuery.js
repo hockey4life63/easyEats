@@ -46,7 +46,8 @@ const _convertToRenderObject = (recipe)=>{
         href:"#",
         ingredients:recipe.ingredients
     }
-        retArr.thumbnail =  (retArr.thumbnail && retArr.thumbnail.match(/\.(jpeg|jpg|gif|png)$/)) ? retArr.thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+   
+        retArr.thumbnail =  (retArr.thumbnail && retArr.thumbnail.match(/\.(jpeg|jpg|gif|png)$/)) ? retArr.thumbnail:  "/public/assets/img/placeholder.png"
 
     if(recipe.User.dataValues.name ){
         retArr.userName = recipe.User.dataValues.name
