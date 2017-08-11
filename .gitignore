@@ -1,6 +1,4 @@
 node_modules
-config/
 schema.sql
-keys.js
 .DS_Store
 
