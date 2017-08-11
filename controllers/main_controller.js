@@ -13,11 +13,7 @@ router.get("/", (req, res)=>{
   res.sendFile(path.join(__dirname, "../public/home.html"))
 })
 
-router.get("/signup", (req,res)=>{
-  //render sign up page
-})
-
-router.get("/search", (req, res)=>{
+router.get("/search/all", (req, res)=>{
     res.sendFile(path.join(__dirname, "../public/searchByAllThree.html"))
 })
 
@@ -25,7 +21,7 @@ router.get("/search/ingredient", (req, res)=>{
   res.sendFile(path.join(__dirname, "../public/searchByIngredient.html"))
 })
 
-router.get("/search/author", (req, res)=>{
+router.get("/search/username", (req, res)=>{
     res.sendFile(path.join(__dirname, "../public/searchByAuthor.html"))
 })
 

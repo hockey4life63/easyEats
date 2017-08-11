@@ -5,6 +5,7 @@ $("#author-name-button").on("click", function() {
     }
     else {
         username = $("#author-name").val().trim();
+        window.location = "/api/search/null/null/" + username + "/0";
     }
-    window.location = "/api/search/null/null/" + username + "/0";
+   
 });

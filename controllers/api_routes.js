@@ -101,28 +101,59 @@ router.get("/trendingRecipes", (req, res)=>{
 
 // Initial routing to occur when user has option to search by all 3 parameters
 router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
-    
+    //check if search paramater is null
     let recipe = req.params.recipe==="null"?null:req.params.recipe;
     let ingredients = req.params.ingredients==="null"?null:req.params.ingredients.split(",");
     let username = req.params.username==="null"?null:req.params.username;
+    //grab the current page
     let offset = parseInt(req.params.page);
+    //find total count of items and check amount fo 30 count page
     let totalOffset = offset*10;
     let singlePageOffset = totalOffset%30;
     totalOffset = totalOffset/30;
+    //build the link for next page url
     let nextUrl = `/api/search/${req.params.recipe}/${req.params.ingredients}/${req.params.username}/${offset+1}`;
-
+    let search = {
+        username,
+        ingredients:ingredients.join(","),
+        recipeName:recipe
+    }
+    /*
+        findUserRecipeByIngredient,
+        findUserRecipeByIngredientAndName,
+        findUserRecipeByUserAndRecipe,
+        findUserRecipeByAll
+    */
     if(!recipe&&!ingredients&&!username){
         //send error
         console.log("Null");
+        res.render("no_results");
     } else if(recipe && ingredients && username){
         //search with all
         console.log("Searching by recipe, ingredients, and username");
+        dbOrm.findUserRecipeByAll(ingredients, username, recipe, (results, err)=>{
+            if (err) {
+                res.render("no_results");
+            } else{
+                res.render("recipe_search", {
+                    recipe:results,
+                    nextPage: nextUrl,
+                    search
+                });
+            }
+        })
     }else if(recipe){   
         if(ingredients){
-            //search recipe/ingredidents
+            //search recipe/ingredients
             console.log("Searching by recipe and ingredients");
-            console.log("Recipe: " + recipe);
             rpOrm.searchByRecipeAndIngredients(recipe, ingredients, offset, (results)=>{
+            //replace thumnail link with a placeholder img
+            results = results.map(ele=>{
+                console.log(ele.thumbnail, ele.thumbnail === "");
+                ele.thumbnail =  (ele.thumbnail !== "") ? ele.thumbnail:  "/public/assets/img/placeholder.png"
+                return ele;
+            });
+                       console.log("results", results);
                 if (results === null) {
                     res.render("no_results");
                 }
@@ -136,6 +167,17 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
         } else if(username){
             //search recipe/username
             console.log("Searching by username and recipe");
+            dbOrm.findUserRecipeByUserAndRecipe(username, recipe, (results, err)=>{
+            if (err) {
+                res.render("no_results");
+            } else{
+                res.render("recipe_search", {
+                    recipe:results,
+                    nextPage: nextUrl,
+                    search
+                });
+            }
+        })
         } else{
             // search recipe
             console.log("Searching by recipe only1")
@@ -144,19 +186,20 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
                 f2fOrm.userSearch(recipeArr,totalOffset, (results2)=>{
                     var combinedResults = [];
                     for (var i = 0; i < 5; i++) {
-                       results1[i].thumbnail =  (results1[i].thumbnail) ? results1[i].thumbnail: "https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
-                        results2[i].thumbnail =(results2[i].thumbnail) ? results2[i].thumbnail :"https://www.bbcgoodfood.com/sites/default/files/styles/carousel_medium/public/recipe-collections/collection-image/2013/05/frying-pan-pizza-easy-recipe-collection.jpg?itok=naGPMoRQ"
+                       results1[i].thumbnail =  (results1[i].thumbnail) ? results1[i].thumbnail:  "/public/assets/img/placeholder.png"
+                        results2[i].thumbnail =(results2[i].thumbnail) ? results2[i].thumbnail : "/public/assets/img/placeholder.png"
                         combinedResults.push(results1[i]);
                         combinedResults.push(results2[i+singlePageOffset]);
 
                     }
-                    if (results1 || results2 === null) {
+                    if (results1 === null || results2 === null) {
                         res.render("no_results");
                     }
                     else {
                         res.render("recipe_search", {
                             recipe:combinedResults,
-                            nextPage:nextUrl
+                            nextPage:nextUrl,
+                    search
                         });
                     }
                 });
@@ -164,12 +207,27 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
         }
     } else if(ingredients){
         if(username){
-            //search ingredidents/username
+            //search ingredients/username
             console.log("Searching by username and ingredients");
+            dbOrm.findUserRecipeByIngredientAndName(ingredients, username, (results, err)=>{
+            if (err) {
+                res.render("no_results");
+            } else{
+                res.render("recipe_search", {
+                    recipe:results,
+                    nextPage: nextUrl,
+                    search
+                });
+            }
+        })
+
         }else{
-            //search ingredidents
+            //search ingredients
             console.log("Searching by ingredients only");
             rpOrm.searchByIngredients(req.params.ingredients, offset, (results)=>{
+                results = results.map(ele=>{
+                    ele.thumbnail =  (ele.thumbnail) ? ele.thumbnail:  "/public/assets/img/placeholder.png"
+                });
                 console.log(results);
                 if (results === null) {
                     res.render("no_results");
@@ -177,7 +235,8 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
                 else {
                     res.render("recipe_search", {
                 recipe:results,
-                nextPage: nextUrl
+                nextPage: nextUrl,
+                    search
             });   
                 }
             });
@@ -192,7 +251,8 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
             else {
                 res.render("recipe_search", {
                 recipe:results,
-                nextPage: nextUrl
+                nextPage: nextUrl,
+                    search
             });   
             }
         });
