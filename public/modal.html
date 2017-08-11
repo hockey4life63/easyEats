@@ -18,25 +18,36 @@
     <link rel="stylesheet" href="mdl-jquery-modal-dialog.css">
     <script src="mdl-jquery-modal-dialog.js"></script>
  -->
+ <style type="text/css">
+ 	#save-button {
+ 		background: #4caf50;
+ 		color: #fff;
+ 	}
+ 	#close-button, #modal-ingredients, #recipe-title {
+ 		color: #4caf50;
+ 	}
+ 	
+ 	
+ </style>
 
 </head>
 <body>
 	<button class="mdl-button mdl-button--raised mdl-js-button dialog-button">Show Dialog</button>
 
-		<p>
+		<!-- <p>
 		  Remember that the Dialog component requires the <a href="https://github.com/GoogleChrome/dialog-polyfill">Dialog polyfill</a> in order to function.
 		  It takes advantage of the native dialog element to provide the most robust experience possible.
-		</p>
+		</p> -->
 
 	<dialog id="dialog" class="mdl-dialog">
-	  <h3 id = "recipe-title" class="mdl-dialog__title">Title</h3>
+	  <h3 id = "recipe-title" class="mdl-dialog__title">Garden Fresh Salad</h3>
 	  <div class="mdl-dialog__content">
-	    <p>
+	    <!-- <p>
 	      This is an example of the Material Design Lite dialog component.
 	      Please use responsibly.
-	    </p>
-	    <img src="pic_mountain.jpg" alt="Mountain View" style= "width:304px;height:228px;" id= "img-id">
-	    <p> For more information please visit <a href = "" id = "link-id">link here</a>
+	    </p> -->
+	    <img src="https://www.impromy.com/wordpress_flexi/wp-content/uploads/2016/12/box_of_vegetables.png" alt="Mountain View" style= "width:304px;height:228px;" id= "img-id"><br><br>
+	    <p> For more information please visit <a href = "" id = "link-id">link here</a><br><br>
 
 	    <!-- <h5 class="header">Text area with multi-line input</h5>
 		 <div class = "simple-text mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -44,11 +55,12 @@
 		    <label class = "mdl-textfield__label" for ="textfield-1" >Text...</label>
 		   <span class = "mdl-textfield__error">Input is not a number</span>
 		 </div> -->
+		 <p id = "modal-ingredients">Ingredients here</p>
 	  </div>
 
 	  <div class="mdl-dialog__actions">
-	    <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Save</button>
-	    <button type="button" class="mdl-button mdl-js-button" >Close</button>
+	    <button type="button" id= "save-button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent ">Save</button>
+	    <button type="button" id= "close-button" class="mdl-button mdl-js-button" >Close</button>
 	  </div>
 	</dialog>
 	<script type="text/javascript" src ="assets/js/modal_javascript.js"></script>
