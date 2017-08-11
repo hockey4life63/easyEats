@@ -8,8 +8,8 @@ $("#home-search").on("click", function() {
     else {
         var recipeArr = $("#user-input").val().trim().split(" ");
         recipe = recipeArr.join("+");
+        window.location = "/api/search/" + recipe + "/null/null/0";
     }
-    window.location = "/api/search/" + recipe + "/null/null/0";
 });
 
 var dialog1 = document.querySelector("#dialog1");
