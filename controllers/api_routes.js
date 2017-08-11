@@ -114,9 +114,9 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
     //build the link for next page url
     let nextUrl = `/api/search/${req.params.recipe}/${req.params.ingredients}/${req.params.username}/${offset+1}`;
     let search = {
-        username,
-        ingredients:ingredients.join(","),
-        recipeName:recipe
+        username:(username)?username:"",
+        ingredients:(ingredients)?ingredients.join(","):"",
+        recipeName:(recipe)?recipe:""
     }
     /*
         findUserRecipeByIngredient,
@@ -244,7 +244,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res)=>{
     } else{
         //username
         console.log("Searching by username only");
-        dbOrm.findUserRecipe(req.params.username, (results)=>{ 
+        dbOrm.findUserRecipe(username, (results)=>{ 
             if (results === null) {
                 res.render("no_results");
             }

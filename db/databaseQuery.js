@@ -46,7 +46,7 @@ const _convertToRenderObject = (recipe)=>{
         href:"#",
         ingredients:recipe.ingredients
     }
-   
+
         retArr.thumbnail =  (retArr.thumbnail && retArr.thumbnail.match(/\.(jpeg|jpg|gif|png)$/)) ? retArr.thumbnail:  "/public/assets/img/placeholder.png"
 
     if(recipe.User.dataValues.name ){
@@ -140,12 +140,16 @@ const findRecipe = (recipe_id, callback)=>{
     })
 }
 
-const findUserRecipe = (UserId, callback)=>{
+const findUserRecipe = (name, callback)=>{
     db.Recipe.findAll({
-        where:{
-            UserId
-        }
-    }).then(results =>{
+            include:{
+                model: db.User,
+                where:{
+                    name
+                }
+            }
+        }).then(results =>{
+        results = results.map(_convertToRenderObject);
         callback(results)
     }).catch((err)=>{
         callback(err, true)
