@@ -3,59 +3,121 @@
   <head>
     <meta charset = "UTF-8">
     <title>EasyEats</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css">
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
-    
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css" />
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style type="text/css">
-      body {
-        padding: 20px;
-      }
-      .mdl-textfield.user-recipe-ingredients {
-        margin: 20px 20px;
-      }
-      .mdl-textfield.user-recipe-title {
-        margin: 20px 20px;
-      }
-      .container1 {
-        margin: 0 auto;
-        width: 900px;
-      }
-      .container2 {
-        margin: 0 auto;
-        width: 600px;
-      }
-      .demo-card-wide.mdl-card {
-        width: 512px;
-      }
+<!-- Uses a transparent header that draws on top of the layout's background -->
+<style>
+.fixed-header {
+  background: url('https://static1.squarespace.com/static/563b4d74e4b0d8beddbfe949/563b4dd5e4b0d4f2c9bc2a64/563b5adee4b07b20460e0a18/1446730465786/?format=2500w') center / cover;
+}
+.fixed-header .mdl-layout__header-row .mdl-navigation__link:last-of-type  {
+  padding-right: 0;
+}
+.fixed-header .mdl-layout__header,
+.fixed-header .mdl-layout__drawer-button, 
+.fixed-header .mdl-layout__header-row .mdl-navigation__link,
+ #ingredient-search {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+    color: white;
+}
+.mdl-layout__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.homepage-search {
+  /*margin: auto;*/
+  /*width: 350px;*/
+  border: 2px solid green;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  width: 450px;
+}
+ .mdl-textfield .mdl-textfield__input {
+  width: 400px;
+}
+/*#search1 {
+  width: 600px;
+}*/
+  button.capitalize, #add-recipe-button {
+      /*text-transform: capitalize;*/
+      color: white;
+  }
+  #add-recipe {
+  color: green;
+}
+</style>
 
-      #image-icon {
-        font-size: 68px;
-        margin: 20px;
-        justify-content: center;
-      }
-    </style>
-  </head>
-  
-  <body>
-  <div class="container1">
-    <h5 class="header">Add your recipe</h5>
+</head>
 
-      <div class="mdl-card mdl-shadow--4dp demo-card-wide">
+<body>
 
-      <!-- <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">Welcome</h2>
-      </div> -->
-        <form action="#">
-          <!-- <div class = "image-icon">
-            <div id="image-icon" class="icon material-icons">add_a_photo</div>
-            <div class="mdl-tooltip mdl-tooltip--large" for="image-icon">
-              Add image
-            </div>
-          </div> -->
+<!-- Always shows a header, even in smaller screens. -->
+<div class="fixed-header mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">EasyEats</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href="">Home</a>
+        <a class="mdl-navigation__link" href="">Seach by Author Name</a>
+        <a class="mdl-navigation__link" href="">Search by Recipe Name</a>
+        <a class="mdl-navigation__link" href="">Search by All Three</a>
+        <!-- <a class="mdl-navigation__link" href="">Login</a>
+        <a class="mdl-navigation__link" href="">Sign Up</a> -->
+        <button class="capitalize mdl-button mdl-js-button">
+          Login
+        </button>
+        <button class="capitalize mdl-button mdl-js-button">
+          Sign Up
+        </button>
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Title</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="">Home</a>
+        <a class="mdl-navigation__link" href="">Search by Recipe Name</a>
+        <a class="mdl-navigation__link" href="">Search by All Three</a>
+        <!-- <a class="mdl-navigation__link" href="">Profile</a>
+        <a class="mdl-navigation__link" href="">Add a Recipe</a>
+        <a class="mdl-navigation__link" href="">Login</a>
+        <a class="mdl-navigation__link" href="">Sign Up</a>
+        <a class="mdl-navigation__link" href="">Logout</a> -->
+        <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+          Profile
+        </button>
+        <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+          Add a Recipe
+        </button>
+            <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+          Login
+        </button>
+        <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+          Sign Up
+        </button>
+        <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+          Logout
+        </button>
 
-          <div class ="container2">
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+      <form action="#">
+          <div class = "homepage-search" >
+
+            <h5 id="add-recipe" class="header">Add your recipe</h5>
+
+          <!-- <div class="mdl-card mdl-shadow--4dp demo-card-wide"> -->
+            <div class ="container2">
     
             <div class="user-recipe-title mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
               <input class="mdl-textfield__input" type="text" id="recipe_title">
@@ -70,19 +132,22 @@
               <label class="mdl-textfield__label" for="ingredients">Please type the ingredients</label>
             </div>
             <div class="user-recipe-ingredients mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <textarea class="mdl-textfield__input" type="text" rows= "3" id="instructions" ></textarea>
+              <textarea class="mdl-textfield__input" type="text" rows= "5" id="instructions" ></textarea>
               <label class="mdl-textfield__label" for="instructions">Instructions</label>
             </div>
           </div>
 
           <div class="mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-button--colored mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                        Submit
+            <button id="add-recipe-button" class="mdl-button mdl-button--colored mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                        Add
             </button>
           </div>
 
-        </form>
-      </div>
-      </div>
-  </body>
+          </div>
+
+      </form>
+    </div>
+  </main>
+</div>
+</body>
 </html>
