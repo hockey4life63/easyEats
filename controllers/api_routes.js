@@ -17,23 +17,26 @@ let router = express.Router();
 
 
 router.post("/addStar", (req, res) => {
-    let starData = {
-        UserId: req.body.user_id,
-        RecipeId: req.body.recipe_id
-    }
-    let token = req.body.token;
-    dbOrm.addStar(starData, token, (results, err) => {
-        if (err) {
-            console.log(results)
-            res.json({
-                err: results,
-                success: false
-            })
-        } else {
-            res.json(results)
+    dbOrm.findRecipeId(req.body, (RecipeId=>{
+        let starData = {
+            UserId: req.body.user_id,
+            RecipeId
         }
+        let token = req.body.token;
+        dbOrm.addStar(starData, token, (results, err) => {
+            if (err) {
+                console.log(results)
+                res.json({
+                    err: results,
+                    success: false
+                })
+            } else {
+                res.json(results)
+            }
 
-    })
+        })
+    }) )
+    
 })
 
 router.post("/addRecipe", (req, res) => {
@@ -114,9 +117,9 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
     //build the link for next page url
     let nextUrl = `/api/search/${req.params.recipe}/${req.params.ingredients}/${req.params.username}/${offset+1}`;
     let search = {
-        username: (username) ? username : " ",
-        ingredients: (ingredients) ? ingredients.join(",") : " ",
-        recipeName: (recipe) ? recipe : " "
+        username: (username) ? username : "",
+        ingredients: (ingredients) ? ingredients.join(",") : "",
+        recipeName: (recipe) ? recipe : ""
     }
     console.log(search)
     /*

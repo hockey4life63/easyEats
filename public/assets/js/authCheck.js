@@ -84,6 +84,8 @@ const checkLoginStatus = ()=>{
             buildUserLink(results.id, results.name);
             console.log("worked!")
             Cookies.set("userToken",results.token, {expires:7})
+            Cookies.set("user_id", results.id);
+                Cookies.set("userName", results.name);
         }else{
             //keep plogin/signup and delete cookie
             buildLoginLink();
@@ -98,13 +100,18 @@ $("#login1").on("click", function(e){
       let user_info = {};
       user_info.name=$("#textfield_username").val().trim();
       user_info.password = $("#textfield_password").val().trim();
+      $("#textfield_username").val("")
+      $("#textfield_password").val("")
         $.post("/login/signIn",user_info, (data)=>{
             console.log(data)
             if(data.success){
-
                 Cookies.set('userToken', data.token);
+                Cookies.set("user_id", data.id);
+                Cookies.set("userName", data.name);
                 checkLoginStatus();
                 dialog1.close();
+            }else{
+                alert(data.msg)
             }
       })
 }); 
@@ -115,13 +122,24 @@ $("#login2").on("click", function(e){
       user_info.name=$("#textfield_new_username").val().trim();
       user_info.password = $("#textfield_new_password").val().trim();
       passwordsMatch = $("#textfield_password_confirm").val().trim() === user_info.password;
+      $("#textfield_new_username").val("")
+      $("#textfield_new_password").val("")
+      $("#textfield_password_confirm").val("")
       if(passwordsMatch){
         $.post("/login/signUp",user_info, (data)=>{
-            Cookies.set('userToken', data.token);
+            if(data.success){
+                Cookies.set('userToken', data.token);
+                Cookies.set("user_id", data.id);
+                Cookies.set("userName", data.name);
+                checkLoginStatus();
+                dialog2.close();
+            } else{
+                alert(data.msg)
+            }
       });
       }else{
         //display error
-        console.log("password match : ", passwordsMatch)
+        alert("passwords dont match");
       }
       
     });

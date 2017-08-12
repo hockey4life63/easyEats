@@ -47,6 +47,7 @@ acctManager.createAcct = (userInfo, callback) => {
                 }
             }).then(results => {
                 //if created a new one send response
+                console.log(results)
                 let resObj;
                 if (results.includes(true)) {
                     //create new token 
@@ -169,6 +170,13 @@ acctManager.comparePassword = (req, callback) => {
             name: req.body.name
         }
     }).then((userDbInfo) => {
+        if(userDbInfo === null){
+            callback({
+                msg:"username or password is incorrect",
+                success:false
+            })
+            return;
+        }
         bcrypt.compare(req.body.password, userDbInfo.pw_hash, (err, matched) => {
             //if matches update with new uuid
             const newUuid = uuidv4();
@@ -215,6 +223,7 @@ acctManager.comparePassword = (req, callback) => {
 
         }) //compare
     }).catch(data => {
+        console.log(data)
         callback({
             msg: "password does not match",
             success: false

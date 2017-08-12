@@ -73,12 +73,16 @@ const findRecipeId = (recipeObj, callback) => {
 }
 
 const addStar = (starObj, token, callback) => {
-    checkToken(token, (results, err) => {
+    checkToken({token}, (results, err) => {
+        console.log("token:",results)
         if (err) {
             callback("invlaid token", true)
         } else {
             db.Stared.create(starObj).then(results => {
-                callback(results)
+                callback({
+                    success:true,
+                    msg:"recipe saved"
+                })
             }).catch((error) => {
                 callback(error, true)
             })
@@ -438,6 +442,7 @@ module.exports = {
     addComment,
     getAllComments,
     findRecipe,
+    findRecipeId,
     findUserRecipe,
     findUserRecipeByName,
     findUserRecipeByIngredient,
