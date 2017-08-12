@@ -1,23 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset = "UTF-8">
-    <title>EasyEats</title>
-    <script
-    src="https://code.jquery.com/jquery-3.2.1.min.js"
-    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous">
-    </script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css">
 
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <!-- <link rel="stylesheet" href="assets/css/modal_style.css" /> -->
 
-<!-- Uses a transparent header that draws on top of the layout's background -->
+
+
+
+
 <style>
 .fixed-header {
-  background: url('https://crudevegandotcom.files.wordpress.com/2016/03/raw-food.jpg?w=1200') center / cover;
+  /*background: url('http://www.relevance.pro/picthumb.php?f=images/proyectos/1308093133625proyectos--08.jpg&w=450&h=225&crop=1') center / cover;*/
+  background: #fff;
 }
 .fixed-header .mdl-layout__header-row .mdl-navigation__link:last-of-type  {
   padding-right: 0;
@@ -25,8 +15,7 @@
 .fixed-header .mdl-layout__header,
 .fixed-header .mdl-layout__drawer-button, 
 .fixed-header .mdl-layout__header-row .mdl-navigation__link,
- #home-search {
-
+ #ingredient-search {
   /* This background is dark, so we set text to white. Use 87% black instead if
      your background is light. */
     color: white;
@@ -47,24 +36,51 @@
  .mdl-textfield .mdl-textfield__input {
   width: 400px;
 }
-
+/*#search1 {
+  width: 600px;
+}*/
 button.capitalize {
     /*text-transform: capitalize;*/
     color: white;
 }
-/*#search1 {
-  width: 600px;
-}*/
+
+.user-recipe-title {
+        color: white;
+    }
+    .mdl-textfield--floating-label.is-focused .mdl-textfield__label {
+        color: white;
+    }
+    /*.mdl-textfield--floating-label .mdl-textfield__label {
+        color: yellow;
+    }*/
+    .material-icons, .mdl-layout-title, #results-submit {
+        color: white;
+    }
+    .article-image {
+      width: 100%;
+      max-height: 250px;
+    }
+    .mdl-layout__content {
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      flex: none;
+    }
+    .mdl-card {
+      height: 400px;
+    }
+    .mdl-button--accent.mdl-button--accent, #recipe-title, #link-id, #close-button {
+      color: #4caf50;
+    }
+    #dialog {
+      width: 500px;
+    }
+    #save-button {
+      background: #4caf50;
+      color: #fff;
+    }
+
 </style>
-
-<link rel="stylesheet" href="/public/assets/css/modal_style.css">
-
-</head>
-
-
-<body>
-
-<!-- Always shows a header, even in smaller screens. -->
 <div class="fixed-header mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
@@ -74,76 +90,67 @@ button.capitalize {
       <div class="mdl-layout-spacer"></div>
       <!-- Navigation. We hide it in small screens. -->
       <nav class="mdl-navigation mdl-layout--large-screen-only">
+       <!--  <a class="mdl-navigation__link" href="">Home</a> -->
+        <a class="mdl-navigation__link" href="/">Search by Recipe</a>
         <a class="mdl-navigation__link" href="/search/ingredient">Search by Ingredient</a>
-        <a class="mdl-navigation__link" href="/search/username" >Seach by Username</a>
-        <a class="mdl-navigation__link" href="/search/all">Search by All</a>
+        <a class="mdl-navigation__link" href="/search/username">Search by Username</a>
+        <!-- <a class="mdl-navigation__link" href="">Login</a>
+        <a class="mdl-navigation__link" href="">Sign Up</a> -->
         <button type="button" id="show-dialog1-1" class="capitalize mdl-button mdl-js-button">
           Login
         </button>
         <button id="show-dialog2-1" type="button" class="capitalize mdl-button mdl-js-button">
           Sign Up
         </button>
-        <!-- <a class="mdl-navigation__link" href="">Login</a>
-        <a class="mdl-navigation__link" href="">Sign Up</a> -->
       </nav>
     </div>
   </header>
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">EasyEats</span>
     <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" href="/search/ingredient">Search by Ingredient</a>
-      <a class="mdl-navigation__link" href="/search/username">Search by Username</a>
-      <a class="mdl-navigation__link" href="/search/all">Search by All</a>
-      <!-- <a class="mdl-navigation__link" href="">Profile</a>
-      <a class="mdl-navigation__link" href="">Add a Recipe</a> -->
-      <!-- <a class="mdl-navigation__link" href="">Login</a>
-      <a class="mdl-navigation__link" href="">Sign Up</a>
-      <a class="mdl-navigation__link" href="">Logout</a> -->
-       <button id="profile-btn" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+        <!-- <a class="mdl-navigation__link" href="">Home</a> -->
+        <a class="mdl-navigation__link" href="/">Search by Recipe</a>
+        <a class="mdl-navigation__link" href="/search/ingredient">Seach by Ingredient</a>
+        <a class="mdl-navigation__link" href="/search/username">Search by Username</a>
+        <!-- <a class="mdl-navigation__link" href="">Profile</a>
+        <a class="mdl-navigation__link" href="">Add a Recipe</a>
+        <a class="mdl-navigation__link" href="">Login</a>
+        <a class="mdl-navigation__link" href="">Sign Up</a>
+        <a class="mdl-navigation__link" href="">Logout</a> -->
+        <button id="profile-btn" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
           Profile
         </button>
-    <button id="add-recipe-link" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+         <button id="add-recipe-link" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
       Add a Recipe
     </button>
-    <button type="button" id="show-dialog1-2" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
-      Login
-    </button>
-    <button type="button" id="show-dialog2-2" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
-      Sign Up
-    </button>
-      <button class="capitalize mdl-navigation__link mdl-button mdl-js-button" id="burger-logout">
+        <button type="button" id="show-dialog1-2" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+          Login
+        </button>
+        <button type="button" id="show-dialog2-2" class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+          Sign Up
+        </button>
+        <button class="capitalize mdl-navigation__link mdl-button mdl-js-button" id="burger-logout">
           Logout
         </button>
-    
     </nav>
   </div>
+    
   <main class="mdl-layout__content">
-    <div class="page-content"><!-- Your content goes here -->
-
-      <form>
-          <div class = "homepage-search" >
-
-           <!-- class "mdl-textfield container" -->
-           <div class="test1 mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            
-            <!-- class "mdl-textfield__input" -->
-            <input class="mdl-textfield__input" type="text" id="user-input" />
-      
-              <!-- class "mdl-textfield__label" -->
-            <label class="mdl-textfield__label" for="user-input">Please type the recipe name</label>
-      
-           </div>
-
-           <!-- <button class="test2 mdl-button mdl-js-button mdl-button--icon" id ="search1">
-                <i class="material-icons">search</i>
-           </button> -->
-           <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-button--raised mdl-js-ripple-effect" id = "home-search">Search</button>
-        
-          </div>
-
-      </form>
-    </div>
-  </main>
+            <h2 class="mdl-cell mdl-cell--3-col">{{username}}'s Saved Recipes</h2>
+            {{#each recipe}}
+                <div class="mdl-cell mdl-cell--3-col mdl-card mdl-shadow--4dp portfolio-card" data-link={{this.href}} id="recipe{{@index}}">
+                    <div class="mdl-card__media">
+                        <img class="article-image" src={{this.thumbnail}} border="0" alt="">
+                    </div>
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">{{this.title}}</h2>
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <a class="button-color mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--accent recipe-modal" data-link={{this.href}} data-img={{this.thumbnail}} data-title="{{this.title}}" data-ingredients="{{this.ingredients}}">Read more</a>
+                    </div>
+                </div>
+            {{/each}} 
+        </main>
 </div>
 
 <dialog id="dialog1" class="mdl-dialog">
@@ -163,7 +170,7 @@ button.capitalize {
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
                     <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_password">Password</label>
-                    <input class="mdl-textfield__input" type="password" id="textfield_password" name="password" required="true" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})" />
+                    <input class="mdl-textfield__input" type="password" id="textfield_password"  name="password" required="true" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})" />
                     <span class="mdl-textfield__error">
                         6-20 characters with at least a digit, lowercase and uppercase letters,
                         and special symbol in @#$%
@@ -175,7 +182,7 @@ button.capitalize {
                     </button>
                 </div>
                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
-                    <a class="mdl-button--primary">Register now !</a>
+                    <a id="register-btn" class="mdl-button--primary" href="#">Register now !</a>
                 </div>
                 <!-- <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
           <a class="mdl-button--primary">Forgot password ?</a>
@@ -205,7 +212,7 @@ button.capitalize {
 
                   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
                       <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_new_username">Username</label>
-                      <input class="mdl-textfield__input" type="text" id="textfield_new_username"  name="username" pattern="^[a-z0-9_-]{3,15}$"/>
+                      <input class="mdl-textfield__input" type="text" id="textfield_new_username" name="username" pattern="^[a-z0-9_-]{3,15}$"/>
                       <span class="mdl-textfield__error">3-15 characters with only lowercase letters, digits, underscore, and hyphen</span>
                   </div>
 
@@ -221,7 +228,7 @@ button.capitalize {
 
                   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--12-col">
                       <label class="mdl-textfield__label mdl-color-text--grey" for="textfield_password_confirm">Password Confirm</label>
-                      <input class="mdl-textfield__input" type="password" id="textfield_password_confirm" value = "password" name="password_confirm"/>
+                      <input class="mdl-textfield__input" type="password" id="textfield_password_confirm" name="password_confirm"/>
                   </div>
 
                   <div class="mdl-cell mdl-cell--12-col send-button" align="center">
@@ -237,12 +244,22 @@ button.capitalize {
       </div>
   </div>
 </dialog>
+    <dialog id="dialog" class="mdl-dialog">
+      <h3 id = "recipe-title" class="mdl-dialog__title">Garden Fresh Salad</h3>
+      <div class="mdl-dialog__content">
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.2/dialog-polyfill.min.js">
-</script>
-<script type="text/javascript" src="/public/assets/js/home.js"></script>
-<script type="text/javascript" src="/public/assets/js/cookie.js"></script>
-<script type="text/javascript" src="/public/assets/js/authCheck.js"></script>
-</body>
-</html>
+        <img src="https://www.impromy.com/wordpress_flexi/wp-content/uploads/2016/12/box_of_vegetables.png" alt="Mountain View" style= "width:304px;height:228px;" id= "img-id"><br><br>
+        <p> For more information please visit <a href = "" id = "link-id" target="_blank">link here</a><br><br>
+          
+         <p>Ingredients:</p><p id = "modal-ingredients">Ingredients here</p>
+      </div>
+
+      <div class="mdl-dialog__actions">
+        <button type="button" id= "save-button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent ">Save</button>
+        <button type="button" id= "close-button" class="mdl-button mdl-js-button" >Close</button>
+      </div>
+
+
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script type="text/javascript" src ="/public/assets/js/profile_page.js"></script>
 

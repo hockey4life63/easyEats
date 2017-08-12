@@ -24,6 +24,9 @@ router.get("/search/ingredient", (req, res)=>{
 router.get("/search/username", (req, res)=>{
     res.sendFile(path.join(__dirname, "../public/searchByAuthor.html"))
 })
+router.get("/addRecipe", (req, res)=>{
+    res.sendFile(path.join(__dirname, "../public/createRecipe.html"))
+})
 
 module.exports = router;
 
