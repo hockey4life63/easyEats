@@ -302,33 +302,6 @@ const findRecipeStarCount = (RecipeId, callback) => {
     })
 }
 
-// const findUserStaredRecipes = (UserId, callback)=> {
-//     //find id of all recipeds stared by user
-//     db.Stared.findAll({
-//         where:{
-//             UserId
-//         }
-//     }).then((results)=>{
-//         let retArr = []
-//         let count = 0;
-//         //create array of promises
-//         results.forEach( (element, index)=>{
-//             retArr.push(db.Recipe.findById(element.RecipeId))
-//         });
-//         //wait for all to resolve
-//         Promise.all(retArr).then((results)=>{
-//             //pull out just curent data
-//             results = results.map((element)=>{
-//                 return element.dataValues
-//             })
-//             //use callback with results
-//             callback(results)
-//         })
-
-//     }).catch((err)=>{
-//         callback(err, true)
-//     })
-// }
 
 
 const findUserStaredRecipes = (UserId, callback) => {
@@ -432,9 +405,6 @@ const _testAddStared = () => {
 }
 
 module.exports = {
-    testUser: _testAddUser,
-    testRecipe: _testAddRecipe,
-    testStared: _testAddStared,
     findUserStaredRecipes,
     findRecipeStarCount,
     addStar,
