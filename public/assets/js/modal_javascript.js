@@ -69,5 +69,36 @@
      })
       dialog.showModal();
    })
+$("#logout-btn").on("click", (event)=>{
+       Cookies.remove("userToken")
+       console.log(Cookies.get("userToken"))
+        checkLoginStatus();
+    })
+
+const checkLoginStatus = ()=>{
+    let token = Cookies.get("userToken");
+    $.post("/login/check", {
+        token
+    }, (results)=>{
+        if(results.success){
+            //change login/signup to link to acct
+            $("#burger-logout").show();
+            $("#logout-btn").show();
+            Cookies.set("userToken",results.token, {expires:7})
+            Cookies.set("user_id", results.id);
+                Cookies.set("userName", results.name);
+        }else{
+            //keep plogin/signup and delete cookie
+            $("#logout-btn").hide();
+            buildLoginLink();
+            console.log("failed")
+            Cookies.remove("userToken", {path:""})
+        }
+    })
+}
+
+$(document).ready(()=>{
+    checkLoginStatus();
+})
 
   })();
