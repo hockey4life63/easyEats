@@ -163,7 +163,8 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
                 } else {
                     res.render("recipe_search", {
                         recipe: results,
-                        nextPage: nextUrl
+                        nextPage: nextUrl,
+                        search
                     });
                 }
             });

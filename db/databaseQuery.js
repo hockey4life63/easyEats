@@ -41,16 +41,17 @@ const _wrapInObject = (objectKey, object) => {
     return retObj;
 }
 const _convertToRenderObject = (recipe) => {
+  
     let retArr = {
         title: recipe.title,
         thumbnail: recipe.img_url,
-        href: "#",
+        href: recipe.source_url === ""?"#":recipe.source_url,
         ingredients: recipe.ingredients
     }
 
     retArr.thumbnail = (retArr.thumbnail && retArr.thumbnail.match(/\.(jpeg|jpg|gif|png)$/)) ? retArr.thumbnail : "/public/assets/img/placeholder.png"
 
-    if (recipe.User.dataValues.name) {
+    if (recipe.User !== undefined) {
         retArr.userName = recipe.User.dataValues.name
         retArr.UserId = recipe.User.dataValues.id
     }
@@ -74,7 +75,7 @@ const findRecipeId = (recipeObj, callback) => {
 
 const addStar = (starObj, token, callback) => {
     checkToken({token}, (results, err) => {
-        console.log("token:",results)
+     
         if (err) {
             callback("invlaid token", true)
         } else {
@@ -199,10 +200,10 @@ const findUserRecipeByName = (username, callback) => {
 const findUserRecipeByIngredient = (ingredients, callback) => {
     let buildOrArr = _buildObject("$like")
     const andArr = ingredients.map((element) => {
-        console.log(element)
+        
         return _wrapInObject("ingredients", buildOrArr(element))
     });
-    console.log(andArr)
+   
     db.Recipe.findAll({
         where: {
             $and: {
@@ -219,7 +220,7 @@ const findUserRecipeByIngredient = (ingredients, callback) => {
 const findUserRecipeByIngredientAndName = (ingredients, name, callback) => {
     let buildOrArr = _buildObject("$like")
     const andArr = ingredients.map((element) => {
-        console.log(element)
+    
         return _wrapInObject("ingredients", buildOrArr(element))
     });
     db.Recipe.findAll({
@@ -266,7 +267,6 @@ const findUserRecipeByUserAndRecipe = (name, recipeName, callback) => {
 const findUserRecipeByAll = (ingredients, name, recipeName, callback) => {
     let buildOrArr = _buildObject("$like")
     const andArr = ingredients.map((element) => {
-        console.log(element)
         return _wrapInObject("ingredients", buildOrArr(element))
     });
     let recipeNameObj = buildOrArr(recipeName)
@@ -309,12 +309,21 @@ const findUserStaredRecipes = (UserId, callback) => {
         where: {
             UserId
         },
-        include: {
-            model: db.Recipe
-        }
+        include: [{
+                    model: db.Recipe
+                },{
+                    model: db.User
+                }]
     }).then((results) => {
-        results = results.map(element => element.Recipe)
-        callback(results)
+        let username = results[0].dataValues.User.dataValues.name
+        results = results.map((element)=>{
+            return _convertToRenderObject(element.dataValues.Recipe.dataValues)
+        })
+        
+        callback({
+            recipe:results,
+            username
+        })
     }).catch((err) => {
         callback(err, true)
     })

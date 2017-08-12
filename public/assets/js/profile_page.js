@@ -1,10 +1,52 @@
+ $("#profile-btn").hide();
+
+ var dialog = document.querySelector('#dialog');
+      if (!dialog.showModal) {
+          dialogPolyfill.registerDialog(dialog);
+      }
+      // dialogButton.addEventListener('click', function() {
+      //    dialog.showModal();
+      // });
+      dialog.querySelector("#close-button").addEventListener("click", function() {
+          $("#save-button").off("click");
+          dialog.close();
+      });
+      $(".recipe-modal").on("click", function() {
+          $("#save-button").prop("disabled", false);
+          $("#recipe-title").text($(this).attr("data-title"));
+          $("#img-id").attr("src", $(this).attr("data-img"))
+          $("#modal-ingredients").text($(this).attr("data-ingredients"));
+          $("#link-id").attr("href", $(this).attr("data-link"))
+          let recipeObj = {
+              title: $(this).attr("data-title"),
+              img_url: $(this).attr("data-img"),
+              source_url: $(this).attr("data-link"),
+              ingredients: $(this).attr("data-ingredients"),
+              token: Cookies.get("userToken"),
+              user_id: Cookies.get("user_id")
+          }
+          $("#save-button").on("click", () => {
+              console.log(recipeObj)
+              if (Cookies.get("userToken") === undefined) {
+                  showModal1();
+              } else {
+                  $.post("/api/addStar", recipeObj, (results) => {
+                      if (results.success) {
+                          alert("Recipe Saved")
+                          $("#save-button").prop("disabled", true);
+                      }
+                  })
+              }
+          })
+          dialog.showModal();
+      })
+
 $("#burger-logout").on("click", (event)=>{
        Cookies.remove("userToken")
        console.log(Cookies.get("userToken"))
         checkLoginStatus();
   })
-$("#burger-logout").hide();
-$("#profile-btn").hide();
+$("#burger-logout").hide()
 const showModal1 = function() {
   dialog1.showModal();
 }
@@ -153,7 +195,10 @@ $("#login2").on("click", function(e){
       }
       
     });
-
+$("#register-btn").on("click", ()=>{
+        dialog1.close();
+        showModal2();
+      })
 $(document).ready(()=>{
     checkLoginStatus();
 })
