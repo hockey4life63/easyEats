@@ -1,0 +1,104 @@
+
+<style>
+    .user-recipe-title {
+        color: white;
+    }
+
+    .mdl-textfield--floating-label.is-focused .mdl-textfield__label {
+        color: white;
+    }
+    /*.mdl-textfield--floating-label .mdl-textfield__label {
+        color: yellow;
+    }*/
+
+    .material-icons,
+    .mdl-layout-title,
+    #results-submit {
+        color: white;
+    }
+</style>
+
+<div class="fixed-header mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">EasyEats</span>
+            <div class="mdl-layout-spacer"></div>
+            <div class="user-recipe-title mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="recipe_title" value="{{search.recipeName}}">
+                <label class="mdl-textfield__label" for="recipe_title" placeholder="Recipe">Recipe Name</label>
+            </div>&nbsp
+            <div class="user-recipe-title mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="image_url" value="{{search.ingredients}}">
+                <label class="mdl-textfield__label" for="image_url" placeholder="Ingredient">Ingredient</label>
+            </div>&nbsp
+            <div class="user-recipe-title mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="username" value="{{search.username}}">
+                <label class="mdl-textfield__label" for="username" placeholder="Username">Username</label>
+            </div>&nbsp
+            <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="results-submit">
+                Submit
+            </button>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">EasyEats</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="/search/username">Search by Username</a>
+            <a class="mdl-navigation__link" href="/">Search by Recipe Name</a>
+            <a class="mdl-navigation__link" href="/search/all">
+            <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+                Profile
+            </button>
+            <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+                Add a Recipe
+            </button>
+            <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+                Login
+            </button>
+            <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+                Sign Up
+            </button>
+            <button class="capitalize mdl-navigation__link mdl-button mdl-js-button">
+                Logout
+            </button>
+        </nav>
+    </div>
+    <main class="mdl-layout__content">
+        <div class="mdl-grid portfolio-max-width">
+            {{#each recipe}}
+            <div class="mdl-cell mdl-card mdl-shadow--4dp portfolio-card" data-link={{this.href}} id="recipe{{@index}}">
+                <div class="mdl-card__media">
+                    <img class="article-image" src="{{this.thumbnail}}" border="0" alt="">
+                </div>
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">{{this.title}}</h2>
+                </div>
+                <div class=" mdl-card__actions mdl-card--border">
+                    <button type="button" id="show-dialog3" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--accent">Read more</button>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </main>
+</div>
+
+<dialog id="dialog3" class="mdl-dialog">
+    <div class="mdl-dialog__title">
+        <h3 id="recipe-title">Garden Fresh Salad</h3>   
+    </div>
+    <div class="mdl-dialog__content">
+        <img src="https://www.impromy.com/wordpress_flexi/wp-content/uploads/2016/12/box_of_vegetables.png" alt="Veggies" style="width:304px;height:228px;" id= "img-id"><br><br>
+        <p> For more information please visit <a href = "" id = "link-id">link here</a><br><br>
+        <p id = "modal-ingredients">Ingredients here</p>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button type="button" id= "save-button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent ">Save</button>
+        <button type="button" id= "close-button" class="mdl-button mdl-js-button" >Close</button>
+    </div>
+</dialog>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.2/dialog-polyfill.min.js">
+</script>
+
+<script type="text/javascript" src="/public/assets/js/results_page.js"></script>
