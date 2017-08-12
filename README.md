@@ -1,7 +1,8 @@
 # Easy Eats
 ---
-## needs a sequelize config file to work
-`sequelize init:config` 
+## https://easyeatsapp.herokuapp.com/
+---
+A site to find share and save recipes
 ---
 ### Uses 
 * node.js
