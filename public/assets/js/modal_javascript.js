@@ -1,4 +1,7 @@
   (function() {
+    $("#add-recipe-link").on("click", ()=>{
+  window.location = "/addrecipe"
+})
     $("#profile-btn").hide();
       $("#results-submit").on("click", function() {
 
@@ -81,10 +84,10 @@
           }, (results) => {
               if (results.success) {
                   //change login/signup to link to acct
-                  $("#show-dialog1-2").hide();
-                  $("#show-dialog2-2").hide();
+                  $("#show-dialog1-1").hide();
+                  $("#show-dialog2-1").hide();
                   $("#logout-btn").show();
-                  $("#profile-btn")/show();
+                  $("#profile-btn").show();
                    $("#profile-btn").on("click", ()=>{
                     window.location = "/user/profile/"+userId;
                   })
@@ -93,11 +96,12 @@
                   Cookies.set("userName", results.name);
               } else {
                 $("#profile-btn").off("click")
+                $("#profile-btn").hide();
                   //keep plogin/signup and delete cookie
                   $("#logout-btn").hide();
                   console.log("failed")
-                  $("#show-dialog1-2").show();
-                  $("#show-dialog2-2").show();
+                  $("#show-dialog1-1").show();
+                  $("#show-dialog2-1").show();
                   Cookies.remove("userToken", { path: "" })
               }
           })

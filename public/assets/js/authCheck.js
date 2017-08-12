@@ -1,3 +1,6 @@
+$("#add-recipe-link").on("click", ()=>{
+  window.location = "/addrecipe"
+})
 $("#burger-logout").on("click", (event)=>{
        Cookies.remove("userToken")
        console.log(Cookies.get("userToken"))

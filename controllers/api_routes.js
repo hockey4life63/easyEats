@@ -39,7 +39,7 @@ router.post("/addStar", (req, res) => {
     
 })
 
-router.post("/addRecipe", (req, res) => {
+router.post("/addrecipe", (req, res) => {
     let recipe = {
         title: req.body.title,
         ingredients: req.body.ingredients,
@@ -48,15 +48,20 @@ router.post("/addRecipe", (req, res) => {
         UserId: req.body.user_id
     }
     let token = req.body.token;
+    console.log(recipe)
     req.body.img_url ? recipe.img_url = req.body.img_url : null;
     dbOrm.addRecipe(recipe, token, (results, err) => {
+        console.log(results)
         if (err) {
             res.json({
                 err: results,
                 success: false
             })
         } else {
-            res.json(results)
+            res.json({
+                results,
+                success:true
+            })
         }
     })
 });

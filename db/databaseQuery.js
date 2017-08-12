@@ -93,7 +93,7 @@ const addStar = (starObj, token, callback) => {
 }
 
 const addRecipe = (recipeObj, token, callback) => {
-    checkToken(token, (results, err) => {
+    checkToken({token}, (results, err) => {
         if (err) {
             callback(results, true)
         } else {

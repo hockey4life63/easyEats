@@ -1,5 +1,7 @@
  $("#profile-btn").hide();
-
+$("#add-recipe-link").on("click", ()=>{
+  window.location = "/addrecipe"
+})
  var dialog = document.querySelector('#dialog');
       if (!dialog.showModal) {
           dialogPolyfill.registerDialog(dialog);
