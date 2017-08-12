@@ -139,7 +139,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
             if (err) {
                 res.render("no_results");
             } else {
-                res.render("results_page", {
+                res.render("recipe_search", {
                     recipe: results,
                     nextPage: nextUrl,
                     search
@@ -161,7 +161,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
                 if (results === null) {
                     res.render("no_results");
                 } else {
-                    res.render("results_page", {
+                    res.render("recipe_search", {
                         recipe: results,
                         nextPage: nextUrl
                     });
@@ -174,7 +174,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
                 if (err) {
                     res.render("no_results");
                 } else {
-                    res.render("results_page", {
+                    res.render("recipe_search", {
                         recipe: results,
                         nextPage: nextUrl,
                         search
@@ -198,7 +198,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
                     if (results1 === null || results2 === null) {
                         res.render("no_results");
                     } else {
-                        res.render("results_page", {
+                        res.render("recipe_search", {
                             recipe: combinedResults,
                             nextPage: nextUrl,
                             search
@@ -215,7 +215,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
                 if (err) {
                     res.render("no_results");
                 } else {
-                    res.render("results_page", {
+                    res.render("recipe_search", {
                         recipe: results,
                         nextPage: nextUrl,
                         search
@@ -235,7 +235,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
                 if (results === null) {
                     res.render("no_results");
                 } else {
-                    res.render("results_page", {
+                    res.render("recipe_search", {
                         recipe: results,
                         nextPage: nextUrl,
                         search
@@ -250,7 +250,7 @@ router.get("/search/:recipe/:ingredients/:username/:page?", (req, res) => {
             if (results === null) {
                 res.render("no_results");
             } else {
-                res.render("results_page", {
+                res.render("recipe_search", {
                     recipe: results,
                     nextPage: nextUrl,
                     search
