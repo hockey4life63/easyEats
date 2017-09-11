@@ -17,8 +17,8 @@ These instructions will get you a copy of the project up and running on your loc
 1.  Install dependencies
 2.  Add keys.js
 3.  Sequelize setup
-2.  In your CLI, go to the root of your project directory and enter **node server.js**
-3.  In your browser, navigate to **http://localhost:3000**
+4.  In your CLI, go to the root of your project directory and enter **node server.js**
+5.  In your browser, navigate to **http://localhost:3000**
 
 ### Dependencies
 
