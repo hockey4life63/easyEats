@@ -1,5 +1,5 @@
 node_modules
 schema.sql
 .DS_Store
-
+config/
 keys.js
